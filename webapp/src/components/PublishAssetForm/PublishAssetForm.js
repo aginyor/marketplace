@@ -20,7 +20,10 @@ const INPUT_FORMAT = 'YYYY-MM-DD'
 export default class PublishAssetForm extends React.PureComponent {
   static propTypes = {
     asset: assetType,
+<<<<<<< HEAD:webapp/src/components/PublishAssetForm/PublishAssetForm.js
     assetName: PropTypes.string,
+=======
+>>>>>>> feat: sell estates:webapp/src/components/PublishAssetForm/PublishAssetForm.js
     isTxIdle: PropTypes.bool,
     isDisabled: PropTypes.bool,
     onPublish: PropTypes.func.isRequired,
