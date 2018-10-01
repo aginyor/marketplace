@@ -14,7 +14,26 @@ export async function main(getActions = createMonitorActions) {
   await db.connect()
 
   log.info('Connecting to Ethereum node')
+<<<<<<< HEAD
   const contractsData = await connectEth()
+=======
+
+  await eth.connect({
+    contracts: [
+      new contracts.LANDRegistry(env.get('LAND_REGISTRY_CONTRACT_ADDRESS')),
+      new contracts.LegacyMarketplace(
+        env.get('LEGACY_MARKETPLACE_CONTRACT_ADDRESS')
+      ),
+      new contracts.MortgageHelper(env.get('MORTGAGE_HELPER_CONTRACT_ADDRESS')),
+      new contracts.RCNEngine(env.get('RCN_ENGINE_CONTRACT_ADDRESS')),
+      new contracts.MortgageManager(
+        env.get('MORTGAGE_MANAGER_CONTRACT_ADDRESS')
+      ),
+      new contracts.EstateRegistry(env.get('ESTATE_REGISTRY_CONTRACT_ADDRESS'))
+    ],
+    provider: env.get('RPC_URL')
+  })
+>>>>>>> wip: show publication on estate
 
   log.info('Starting CLI')
   const eventsDelay = Number(env.get('PROCESS_EVENTS_DELAY', 2 * 60 * 1000)) // 2 minutes
