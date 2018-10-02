@@ -122,7 +122,11 @@ export default class BuyParcelPage extends React.PureComponent {
     }
 
     if (!isConnected) {
+<<<<<<< HEAD
       return <NotConnected assetType={t('name.parcel')} />
+=======
+      return <NotConnected assetType={t('name.estate')} />
+>>>>>>> refactor: move components
     }
 
     return this.renderPage()
