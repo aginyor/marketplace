@@ -20,17 +20,7 @@ const INPUT_FORMAT = 'YYYY-MM-DD'
 export default class PublishAssetForm extends React.PureComponent {
   static propTypes = {
     asset: assetType,
-<<<<<<< HEAD:webapp/src/components/PublishAssetForm/PublishAssetForm.js
-<<<<<<< HEAD
-<<<<<<< HEAD:webapp/src/components/PublishAssetForm/PublishAssetForm.js
     assetName: PropTypes.string,
-=======
->>>>>>> feat: sell estates:webapp/src/components/PublishAssetForm/PublishAssetForm.js
-=======
-    assetName: PropTypes.string,
->>>>>>> wip: sell, buy & cancel estate publication
-=======
->>>>>>> feat: sell estates:webapp/src/components/PublishAssetForm/PublishAssetForm.js
     isTxIdle: PropTypes.bool,
     isDisabled: PropTypes.bool,
     onPublish: PropTypes.func.isRequired,
@@ -111,11 +101,7 @@ export default class PublishAssetForm extends React.PureComponent {
 
     if (formErrors.length === 0) {
       onPublish({
-<<<<<<< HEAD:webapp/src/components/PublishAssetForm/PublishAssetForm.js
         asset_id: asset.id,
-=======
-        id: asset.id,
->>>>>>> feat: sell estates:webapp/src/components/PublishAssetForm/PublishAssetForm.js
         expires_at: new Date(expiresAt).getTime(),
         price: parseFloat(price)
       })
@@ -143,13 +129,9 @@ export default class PublishAssetForm extends React.PureComponent {
           <label>{t('asset_publish.price')}</label>
           <Input
             type="number"
-<<<<<<< HEAD:webapp/src/components/PublishAssetForm/PublishAssetForm.js
             placeholder={t('asset_publish.price_placeholder', {
               asset_name: assetName
             })}
-=======
-            placeholder={t('asset_publish.price_placeholder')}
->>>>>>> feat: sell estates:webapp/src/components/PublishAssetForm/PublishAssetForm.js
             value={price}
             required={true}
             onChange={this.handlePriceChange}
