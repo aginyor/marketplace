@@ -1,30 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import { txUtils } from 'decentraland-eth'
-import { Segment, Grid, Loader } from 'semantic-ui-react'
-
+import { Segment, Grid } from 'semantic-ui-react'
 import { locations } from 'locations'
-import TxStatus from 'components/TxStatus'
 import EtherscanLink from 'components/EtherscanLink'
 import ParcelPreview from 'components/ParcelPreview'
 import Mana from 'components/Mana'
 import { transactionType } from 'components/types'
 import { t, T } from '@dapps/modules/translation/utils'
+import { getContractAddress } from 'modules/wallet/utils'
+import { getEtherscanHref } from '@dapps/modules/transaction/utils'
 import {
-  getMarketplaceAddress,
-  getMortgageHelperAddress,
-  getMortgageManagerAddress
-} from 'modules/wallet/utils'
-import { getEtherscanHref } from 'modules/transaction/utils'
-import {
-  APPROVE_MANA_SUCCESS,
-  AUTHORIZE_LAND_SUCCESS,
-  TRANSFER_MANA_SUCCESS,
-  BUY_MANA_SUCCESS,
-  APPROVE_MORTGAGE_FOR_MANA_SUCCESS,
-  APPROVE_MORTGAGE_FOR_RCN_SUCCESS
-} from 'modules/wallet/actions'
+  ALLOW_TOKEN_SUCCESS,
+  APPROVE_TOKEN_SUCCESS
+} from 'modules/authorization/actions'
+import { TRANSFER_MANA_SUCCESS, BUY_MANA_SUCCESS } from 'modules/wallet/actions'
 import {
   EDIT_PARCEL_SUCCESS,
   MANAGE_PARCEL_SUCCESS,
@@ -51,9 +41,16 @@ import {
 } from 'modules/estates/actions'
 import { buildCoordinate } from 'shared/parcel'
 import { isNewEstate, calculateMapProps } from 'shared/estate'
+import { ASSET_TYPES } from 'shared/asset'
+import { token } from 'lib/token'
 import { formatDate, formatMana, distanceInWordsToNow } from 'lib/utils'
-
+import { hasEtherscanLink, getHash } from '../utils'
 import './Transaction.css'
+import Status from './Status'
+
+const PREVIEW_SIZE = 54
+const NUM_PARCELS = 5
+const PARCEL_SIZE = PREVIEW_SIZE / NUM_PARCELS
 
 export default class Transaction extends React.PureComponent {
   static propTypes = {
@@ -62,33 +59,22 @@ export default class Transaction extends React.PureComponent {
   }
 
   handleTransactionClick = e => {
-    if (e.target.nodeName !== 'A' && e.target.nodeName !== 'CANVAS') {
+    const { tx } = this.props
+    if (
+      e.target.nodeName !== 'A' &&
+      e.target.nodeName !== 'CANVAS' &&
+      hasEtherscanLink(tx)
+    ) {
       const { tx, network } = this.props
-      const href = getEtherscanHref({ txHash: tx.hash }, network)
+      const href = getEtherscanHref({ txHash: getHash(tx) }, network)
       window.open(href, '_blank')
     }
   }
 
-  renderMarketplaceLink() {
+  renderContractLink(contractName) {
     return (
-      <EtherscanLink address={getMarketplaceAddress()}>
-        Marketplace
-      </EtherscanLink>
-    )
-  }
-
-  renderMortgageHelperLink() {
-    return (
-      <EtherscanLink address={getMortgageHelperAddress()}>
-        Mortgage helper
-      </EtherscanLink>
-    )
-  }
-
-  renderMortgageManagerLink() {
-    return (
-      <EtherscanLink address={getMortgageManagerAddress()}>
-        Mortgage Manager
+      <EtherscanLink address={getContractAddress(contractName)}>
+        {contractName}
       </EtherscanLink>
     )
   }
@@ -107,33 +93,46 @@ export default class Transaction extends React.PureComponent {
     )
   }
 
+  getAssetLink(payload) {
+    if (payload.type === ASSET_TYPES.parcel) {
+      return this.renderParcelLink(payload.x, payload.y)
+    } else if (payload.type === ASSET_TYPES.estate) {
+      return this.renderEstateLink(payload)
+    }
+  }
+
   renderText() {
     const { tx } = this.props
     const { payload } = tx
 
     switch (tx.actionType) {
-      case APPROVE_MANA_SUCCESS: {
+      case ALLOW_TOKEN_SUCCESS: {
+        const { amount, contractName, tokenContractName } = payload
         const tkey =
-          payload.mana > 0 ? 'transaction.approved' : 'transaction.disapproved'
+          amount > 0 ? 'authorization.allowed' : 'authorization.disallowed'
 
         return (
           <T
             id={tkey}
-            values={{ marketplace_contract_link: this.renderMarketplaceLink() }}
+            values={{
+              contract_link: this.renderContractLink(contractName),
+              symbol: token.getSymbolByContractName(tokenContractName)
+            }}
           />
         )
       }
-      case AUTHORIZE_LAND_SUCCESS: {
-        const action = payload.isAuthorized
-          ? t('global.authorized')
-          : t('global.unauthorized')
+      case APPROVE_TOKEN_SUCCESS: {
+        const { isApproved, contractName, tokenContractName } = payload
+        const tkey = isApproved
+          ? 'authorization.approved'
+          : 'authorization.disapproved'
 
         return (
           <T
-            id="transaction.authorize"
+            id={tkey}
             values={{
-              action: action.toLowerCase(),
-              marketplace_contract_link: this.renderMarketplaceLink()
+              contract_link: this.renderContractLink(contractName),
+              symbol: token.getSymbolByContractName(tokenContractName)
             }}
           />
         )
@@ -204,39 +203,26 @@ export default class Transaction extends React.PureComponent {
         )
       }
       case PUBLISH_SUCCESS: {
-        const { x, y } = payload
-
         return (
           <T
             id="transaction.publish"
-            values={{ parcel_link: this.renderParcelLink(x, y) }}
+            values={{ parcel_link: this.getAssetLink(payload) }}
           />
         )
       }
       case BUY_SUCCESS: {
-        const { x, y } = payload
-
         return (
           <T
             id="transaction.buy"
-            values={{ parcel_link: this.renderParcelLink(x, y) }}
+            values={{ parcel_link: this.getAssetLink(payload) }}
           />
         )
       }
       case CANCEL_SALE_SUCCESS: {
-        const { tx_hash, x, y } = payload
-
         return (
           <T
             id="transaction.cancel"
-            values={{
-              publication_link: (
-                <EtherscanLink txHash={tx_hash}>
-                  {t('global.sale').toLowerCase()}
-                </EtherscanLink>
-              ),
-              parcel_link: this.renderParcelLink(x, y)
-            }}
+            values={{ parcel_link: this.getAssetLink(payload) }}
           />
         )
       }
@@ -247,36 +233,6 @@ export default class Transaction extends React.PureComponent {
           <T
             id="transaction.buy_mana"
             values={{ mana: formatMana(mana, '') }}
-          />
-        )
-      }
-
-      case APPROVE_MORTGAGE_FOR_MANA_SUCCESS: {
-        return (
-          <T
-            id="transaction.mortgage_mana"
-            values={{
-              action: (payload.mana > 0
-                ? t('global.authorized')
-                : t('global.unauthorized')
-              ).toLowerCase(),
-              mortgage_contract_link: this.renderMortgageHelperLink()
-            }}
-          />
-        )
-      }
-
-      case APPROVE_MORTGAGE_FOR_RCN_SUCCESS: {
-        return (
-          <T
-            id="transaction.mortgage_rcn"
-            values={{
-              action: (payload.rcn > 0
-                ? t('global.authorized')
-                : t('global.unauthorized')
-              ).toLowerCase(),
-              mortgage_contract_link: this.renderMortgageManagerLink()
-            }}
           />
         )
       }
@@ -381,7 +337,9 @@ export default class Transaction extends React.PureComponent {
             values={{
               asset_link: this.renderEstateLink(estate),
               asset_type: t('global.the_estate').toLowerCase(),
-              owner_link: <Link to={locations.profilePage(to)}>{to}</Link>
+              owner_link: (
+                <Link to={locations.profilePageDefault(to)}>{to}</Link>
+              )
             }}
           />
         )
@@ -392,9 +350,11 @@ export default class Transaction extends React.PureComponent {
   }
 
   renderEstatePreview(tx) {
-    const size = 5
     const { estate } = tx.payload
-    const { center, zoom, pan } = calculateMapProps(estate.data.parcels, size)
+    const { center, zoom, pan } = calculateMapProps(
+      estate.data.parcels,
+      PARCEL_SIZE
+    )
     const { x, y } = center
 
     return (
@@ -409,9 +369,9 @@ export default class Transaction extends React.PureComponent {
           x={x}
           y={y}
           zoom={zoom}
-          width={64}
-          height={64}
-          size={size}
+          width={PREVIEW_SIZE}
+          height={PREVIEW_SIZE}
+          size={PARCEL_SIZE}
           panX={pan.x}
           panY={pan.y}
           selected={estate.data.parcels}
@@ -427,9 +387,9 @@ export default class Transaction extends React.PureComponent {
         <ParcelPreview
           x={x}
           y={y}
-          width={64}
-          height={64}
-          size={15}
+          width={PREVIEW_SIZE}
+          height={PREVIEW_SIZE}
+          size={PARCEL_SIZE}
           selected={{ x, y }}
         />
       </Link>
@@ -437,7 +397,21 @@ export default class Transaction extends React.PureComponent {
   }
 
   renderMANAPreview() {
-    return <Mana size={64} scale={1} />
+    return <Mana size={48} scale={1} />
+  }
+
+  renderAssetPreview(tx) {
+    const asset = tx.payload
+    if (asset.type === ASSET_TYPES.parcel) {
+      return this.renderParcelPreview(tx)
+    } else if (asset.type === ASSET_TYPES.estate) {
+      // renderEstatePreview expects a property "estate" inside the tx payload
+      return this.renderEstatePreview({
+        payload: {
+          estate: tx.payload
+        }
+      })
+    }
   }
 
   render() {
@@ -448,12 +422,19 @@ export default class Transaction extends React.PureComponent {
 
     const { tx } = this.props
 
+    const classnames = `Transaction ${
+      hasEtherscanLink(tx) ? 'with-link' : ''
+    }`.trim()
+
+    const isAssetTransaction = [
+      PUBLISH_SUCCESS,
+      CANCEL_SALE_SUCCESS,
+      BUY_SUCCESS
+    ].includes(tx.actionType)
+
     const isParcelTransaction = [
       EDIT_PARCEL_SUCCESS,
       TRANSFER_PARCEL_SUCCESS,
-      PUBLISH_SUCCESS,
-      BUY_SUCCESS,
-      CANCEL_SALE_SUCCESS,
       MANAGE_PARCEL_SUCCESS,
       CREATE_MORTGAGE_SUCCESS,
       CANCEL_MORTGAGE_SUCCESS,
@@ -469,40 +450,38 @@ export default class Transaction extends React.PureComponent {
       TRANSFER_ESTATE_SUCCESS
     ].includes(tx.actionType)
 
-    const isMANATransaction = !isParcelTransaction && !isEstateTransaction
+    const isMANATransaction =
+      !isAssetTransaction && !isParcelTransaction && !isEstateTransaction
 
     return (
       <Segment size="large" vertical>
         <Grid>
           <Grid.Column
-            className="Transaction"
+            className={classnames}
             onClick={this.handleTransactionClick}
           >
-            {tx.status === txUtils.TRANSACTION_STATUS.pending ? (
-              <Loader active size="mini" />
-            ) : (
-              <div className="mini circle" />
-            )}
+            <div className="transaction-container">
+              <div className="transaction-container-left">
+                <div className="transaction-avatar">
+                  {isAssetTransaction && this.renderAssetPreview(tx)}
+                  {isParcelTransaction && this.renderParcelPreview(tx)}
+                  {isEstateTransaction && this.renderEstatePreview(tx)}
+                  {isMANATransaction && this.renderMANAPreview()}
+                </div>
 
-            <div className="transaction-avatar">
-              {isParcelTransaction && this.renderParcelPreview(tx)}
-              {isEstateTransaction && this.renderEstatePreview(tx)}
-              {isMANATransaction && this.renderMANAPreview()}
-            </div>
-
-            <div className="transaction-text">
-              <TxStatus.Icon
-                className="transaction-icon"
-                txHash={tx.hash}
-                txStatus={tx.status}
-              />
-              <div>{text}</div>
-              <div
-                className="transaction-timestamp"
-                data-balloon-pos="up"
-                data-balloon={formatDate(tx.timestamp)}
-              >
-                {distanceInWordsToNow(tx.timestamp)}
+                <div className="transaction-text-container">
+                  <span className="transaction-text">{text}.</span>
+                  <div
+                    className="transaction-timestamp"
+                    data-balloon-pos="up"
+                    data-balloon={formatDate(tx.timestamp)}
+                  >
+                    {distanceInWordsToNow(tx.timestamp)}
+                  </div>
+                </div>
+              </div>
+              <div className="transaction-container-right">
+                <Status tx={tx} />
               </div>
             </div>
           </Grid.Column>

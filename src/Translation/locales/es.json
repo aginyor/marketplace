@@ -14,6 +14,66 @@
   "address": {
     "its_you": "Eres tú!"
   },
+  "asset_buy": {
+    "about_to_buy": "Estas por comprar {name} {price}",
+    "allowed_balance": "Tu asignación es {allowance}",
+    "buy_asset": "Comprar LAND",
+    "buy_mana": "{click_here} para comprar MANA.",
+    "didnt_allow": "No has autorizado el uso de MANA",
+    "didnt_allow_new_marketplace":
+      "No ha autorizado el uso de MANA para la nueva versión de Marketplace",
+    "needs_at_least": "Necesitas por lo menos {mana} para comprar esta LAND.",
+    "please_allow":
+      "Vaya a {settings_link} y permita que el contrato LegacyMarketplace opere MANA en su nombre",
+    "please_allow_new_marketplace":
+      "Vaya a {settings_link} y permita que el contrato del Marketplace opere MANA en su nombre",
+    "total_balance": "Tu balance es {balance}"
+  },
+  "asset_cancel": {
+    "about_to_cancel": "Estás por cancelar la venta de {name}.",
+    "cancel_sale": "Cancelar venta",
+    "not_for_sale": "La parcela {parcel} no está en venta."
+  },
+  "asset_detail": {
+    "actions": {
+      "cancel": "Cancelar venta",
+      "permissions": "Permisos",
+      "sell": "Vender",
+      "transfer": "Transferir"
+    },
+    "history": {
+      "auction": "Subasta",
+      "event": "Evento",
+      "from": "De",
+      "price": "Precio",
+      "sold": "Vendido",
+      "title": "Historial de transacciones",
+      "to": "A",
+      "when": "Cuando"
+    },
+    "publication": {
+      "buy": "Comprar",
+      "price": "precio"
+    }
+  },
+  "asset_publish": {
+    "already_sold": "Este {asset_name} ya está a la venta para {value}",
+    "errors": {
+      "maximum_expiration": "La fecha de vencimiento máxima es {date}",
+      "maximum_land_price": "El precio máximo {asset_name} es {value} MANA",
+      "minimum_expiration": "La fecha de vencimiento mínima es {date}",
+      "minimum_land_price": "El precio mínimo {asset_name} es {value} MANA"
+    },
+    "expiration": "Vencimiento",
+    "expiration_placeholder": "Fecha de caducidad para esta publicación",
+    "list_asset": "Listar {asset_name} en venta",
+    "please_authorize":
+      "Debe ir a {settings_link} y autorizar que Marketplace opere {asset_name} en su nombre antes de que pueda listarlo en oferta.",
+    "price": "Precio",
+    "price_placeholder": "Precio en MANA para este {asset_name}",
+    "set_asset_price":
+      "Establezca un precio y una fecha de vencimiento para {asset_name}."
+  },
   "atlas": {
     "loading": "Cargando",
     "no_owner": "Sin Dueño",
@@ -22,6 +82,18 @@
     "road": "Carretera",
     "your_estate": "Su propiedad",
     "your_parcel": "Tu parcela"
+  },
+  "authorization": {
+    "allow": "Autorice al {contract_link} a operar {symbol} en su nombre",
+    "allowed":
+      "Usted autorizó a {contract_link} a operar {symbol} en su nombre",
+    "approve": "Autorice al {contract_link} a operar {symbol} en su nombre",
+    "approved":
+      "Usted autorizó a {contract_link} a operar {symbol} en su nombre",
+    "disallowed":
+      "Usted no ha autorizado el {contract_link} para operar {symbol} en su nombre",
+    "disapproved":
+      "Usted no ha autorizado el {contract_link} para operar {symbol} en su nombre"
   },
   "buy_mana": {
     "action": "Comprar Más",
@@ -45,7 +117,8 @@
     "taken": "Asignada",
     "title": "Mapa de colores",
     "unowned": "Sin dueño",
-    "yours": "Tuya"
+    "yours": "Tuya",
+    "yours_on_sale": "Tuya a la venta"
   },
   "contribution": {
     "proposal": "propuesta"
@@ -91,12 +164,11 @@
     "terms": "Términos & Condiciones"
   },
   "global": {
-    "acquired_at": "Adquirido en {date}",
+    "acquired_ago": "Adquirido {date}",
     "activity": "Actividad",
     "add": "añadir",
     "address_placeholder": "0x...",
     "atlas": "Atlas",
-    "authorized": "Autorizado",
     "balance": "Balance",
     "blog": "Blog",
     "cancel": "Cancelar",
@@ -185,6 +257,7 @@
     "duration_placeholder": "Duración en días",
     "errors": {
       "amount_minimum": "La cantidad debe ser mayor que {amount}",
+      "deposit_gt_balance": "El depósito requerido es mayor que su saldo",
       "duration_gte_payable":
         "La duración debe ser mayor o igual que la paga en días",
       "maximum_interest_rate": "La tasa debe ser inferior a {maximum}",
@@ -217,57 +290,30 @@
     "request": "Solicitar una hipoteca",
     "request_land":
       "Está a punto de solicitar una hipoteca por {parcel_name} valorada en {parcel_price}",
-    "requested": "Pedido"
+    "requested": "Pedido",
+    "required_deposit": "Depósito requerido: {deposit}"
+  },
+  "name": {
+    "estate": "Estate",
+    "parcel": "LAND"
   },
   "parcel": {
     "no_description": "Sin descripción",
     "no_name": "Sin nombre",
     "view": "Ver"
   },
-  "parcel_buy": {
-    "about_to_buy": "Estas por comprar {parcel_name} {parcel_price}",
-    "approved_balance": "Tu balance aprobado es {approved_balance}",
-    "buy_land": "Comprar LAND",
-    "buy_mana": "{click_here} para comprar MANA.",
-    "didnt_approve": "No has autorizado el uso de MANA",
-    "needs_at_least": "Necesitas por lo menos {mana} para comprar esta LAND.",
-    "please_approve":
-      "Por favor entra en {settings_link} y permite al contrato de Mercado a operar MANA por tu cuenta",
-    "total_balance": "Tu balance es {balance}"
-  },
-  "parcel_cancel": {
-    "about_to_cancel": "Estás por cancelar la venta de {parcel}.",
-    "cancel_land": "Cancelar la venta de LAND",
-    "not_for_sale": "La parcela {parcel} no está en venta."
-  },
   "parcel_detail": {
     "actions": {
-      "cancel": "Cancelar venta",
-      "create_estate": "Crear Propiedad",
-      "permissions": "Permisos",
-      "sell": "Vender",
-      "transfer": "Transferir"
+      "create_estate": "Crear Propiedad"
     },
     "description": "Descripción",
     "empty_description": "Esta parcela no tiene descripción",
-    "history": {
-      "auction": "Subasta",
-      "event": "Evento",
-      "from": "De",
-      "price": "Precio",
-      "sold": "Venta",
-      "title": "Historial de Transacciones",
-      "to": "A",
-      "when": "Cuando"
-    },
     "owner": {
       "no_owner": "Sin Dueño",
       "part_of": "Parte de {name}"
     },
     "publication": {
-      "buy": "Comprar",
-      "mortgage": "Solicitar hipoteca",
-      "price": "Precio"
+      "mortgage": "Solicitar hipoteca"
     },
     "tags": {
       "title": "Contexto"
@@ -291,24 +337,6 @@
       "Dar permiso para actualizar el contenido de {parcel_name}.",
     "manage_land": "Administrar LAND"
   },
-  "parcel_publish": {
-    "already_sold": "Esta LAND ya se encuentra en venta a {value}",
-    "errors": {
-      "maximum_expiration": "La fecha máxima de expiración es {date}",
-      "maximum_land_price": "El precio máximo de una LAND es {value} MANA",
-      "minimum_expiration": "La fecha mínima de expiracion es {date}",
-      "minimum_land_price": "El precio mínimo de una LAND es {value} MANA"
-    },
-    "expiration": "Expiración",
-    "expiration_placeholder": "Fecha de expiración para esta publicación",
-    "list_land": "Publicar LAND para la venta",
-    "please_authorize":
-      "Tienes que ir a {settings_link} y autorizar al Mercado para operar LAND por tu cuenta antes de publicarla en venta.",
-    "price": "Precio",
-    "price_placeholder": "Precio en MANA para esta LAND",
-    "set_land_price":
-      "Configura un precio y fecha de expiración para {parcel_name}"
-  },
   "parcel_tags": {
     "adjacent": "Adyacente",
     "district": "Distrito",
@@ -326,35 +354,17 @@
     "view": "Ver"
   },
   "settings": {
-    "approve_mana":
-      "Autorizar al {marketplace_contract_link} a operar MANA por tu cuenta",
-    "approve_mana_check":
-      "Marcando autoriza el uso de MANA al contrato de Mercado",
-    "approve_mortgage_mana":
-      "Autorice a {mortgage_contract_link} para operar MANA en su nombre",
-    "approve_mortgage_rcn":
-      "Autorice el {mortgage_contract_link} para operar RCN en su nombre",
     "authorization": "Autorización",
-    "authorize":
-      "Autorizar al {marketplace_contract_link} a operar LAND por tu cuenta",
-    "authorize_land_check":
-      "Marcando autoriza el uso de LAND al contrato de Mercado",
-    "disapprove_mana_check":
-      "Desmarcando desautoriza el uso de MANA al contrato de Mercado",
-    "mana_approved":
-      "Has autorizado al {marketplace_contract_link} a operar MANA por tu cuenta",
-    "marketplace_contract": "Contrato de Mercado",
-    "mortgage_helper_contract": "Contrato de creador hipotecario",
-    "mortgage_manager_contract": "Contrato de administrador hipotecario",
-    "pending_tx": "Tienes una transacción pendiente",
-    "unauthorize_land_check":
-      "Desmarcando desautoriza el uso de LAND al contrato de Mercado",
-    "you_approved_mortgage_mana":
-      "Usted ha autorizado el {mortgage_contract_link} para operar MANA en su nombre",
-    "you_approved_mortgage_rcn":
-      "Usted ha autorizado {mortgage_contract_link} para operar RCN en su nombre",
-    "you_authorized":
-      "Has autorizado al {marketplace_contract_link} a operar LAND por tu cuenta"
+    "authorization_error":
+      "No pudimos cargar sus autorizaciones, por favor intente de nuevo",
+    "authorization_error_contact":
+      "Si el error persiste no dudes en contactar con nosotros.",
+    "for_buying": "Por comprar",
+    "for_buying_LegacyMarketplace": "Activos utilizando MANA (legado)",
+    "for_buying_Marketplace": "Activos utilizando MANA",
+    "for_selling": "Para la venta de",
+    "legacy_authorization": "Autorización heredada",
+    "pending_tx": "Tienes una transacción pendiente"
   },
   "sign_in": {
     "account_unlocked": "Revisa que tu cuenta esté desbloqueada.",
@@ -369,21 +379,15 @@
     }
   },
   "transaction": {
-    "approved":
-      "Has autorizado al {marketplace_contract_link} para operar MANA por tu cuenta.",
-    "authorize":
-      "Has {action} al {marketplace_contract_link} para operar LAND por tu cuenta.",
     "buy": "Has comprado {parcel_link}",
     "buy_mana": "Has comprado {mana} MANA",
-    "cancel": "Has cancelado {publication_link} de {parcel_link}",
+    "cancel": "Cancelaste la venta en {parcel_link}",
     "cancel_mortgage":
       "Usted cancela una hipoteca para comprar el paquete {parcel_link}",
     "claim_mortgage_resolution": "Usted afirmó {parcel_link}",
     "create_estate": "Usted creó la propiedad {name}",
     "create_mortgage":
       "Solicitó una hipoteca para comprar el paquete {parcel_link}",
-    "disapproved":
-      "Has desautorizado al {marketplace_contract_link} para operar MANA por tu cuenta.",
     "dissolve_estate": "Usted disolvió la propiedad {name}",
     "edit":
       "Has editado {parcel_link} con el nombre \"{name}\" y la descripción \"{description}\"",
@@ -396,14 +400,19 @@
     "manage_revoked":
       "Ha revocado el permiso {address_link} para actualizar el contenido de {parcel_link}",
     "mortgage_mana":
-      "Usted {action} el {mortgage_contract_link} para operar MANA en su nombre.",
+      "Usted {action} el {mortgage_contract_link} para operar MANA en su nombre",
     "mortgage_rcn":
-      "Usted {action} el {mortgage_contract_link} para operar RCN en su nombre.",
+      "Usted {action} el {mortgage_contract_link} para operar RCN en su nombre",
     "pay_mortgage":
       "Hizo un pago parcial de {amount} MANA por la hipoteca para comprar el paquete {parcel_link}",
     "publish": "Has publicado {parcel_link}",
     "transfer": "Has transferido {asset_type} {asset_link} a {owner_link}",
     "transfer_mana": "Has transferido {mana} MANA a {address_link}"
+  },
+  "transaction_confirmations": {
+    "count":
+      "{confirmations_count} {confirmations_count, plural, one {confirmación} other {confirmaciones}}",
+    "waiting": "Esperando confirmaciones"
   },
   "transaction_status": {
     "activity_page": "página de actividad",
@@ -421,6 +430,25 @@
         "Tu transacción ha fallado, puedes intentar enviándola nuevamente.",
       "pending": "Tu transacción está esperando ser confirmada."
     }
+  },
+  "transaction_tooltips": {
+    "dropped":
+      "Esta transacción ha sido abandonada por la red. Esto puede ocurrir momentaneamente si acabas de reemplazar una transacción.",
+    "loading":
+      "Obteniendo estado de transacción. En caso de demorar demaciado es recomendable enviar otra transacción con un mayor precio de gas.",
+    "queued":
+      "Esta transacción no se puede procesar porque hay una transacción pendiente anterior",
+    "replaced":
+      "Otra transacción con el mismo nonce que esta se proceso en su lugar"
+  },
+  "transaction_types": {
+    "confirmed": "Aceptado",
+    "dropped": "Caído",
+    "loading": "Cargando",
+    "pending": "Pendiente",
+    "queued": "En cola",
+    "replaced": "Reemplazado",
+    "reverted": "Ha fallado"
   },
   "transfer_estate": {
     "about_to_transfer": "Estás a punto de transferir la propiedad {name}.",

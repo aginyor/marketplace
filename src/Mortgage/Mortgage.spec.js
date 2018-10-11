@@ -3,7 +3,7 @@ import { txUtils } from 'decentraland-eth'
 
 import { db } from '../database'
 import { Mortgage } from '../Mortgage'
-import { Parcel } from '../Parcel'
+import { Parcel } from '../Asset'
 import { Publication } from '../Publication'
 import { ASSET_TYPES } from '../shared/asset'
 import { MORTGAGE_STATUS } from '../shared/mortgage'
@@ -17,7 +17,7 @@ describe('Mortgage', function() {
   beforeEach(() => {
     mortgage = {
       tx_hash: '1xdeadbeef',
-      tx_status: txUtils.TRANSACTION_STATUS.confirmed,
+      tx_status: txUtils.TRANSACTION_TYPES.confirmed,
       status: MORTGAGE_STATUS.pending,
       loan_id: 0,
       mortgage_id: 0,

@@ -18,7 +18,7 @@
 }
 
 .ColorKeyPage .land-color-keys .land {
-  min-width: 132px;
+  min-width: 185px;
   margin-bottom: 15px;
   margin-right: 34px;
   overflow: hidden;
@@ -44,12 +44,17 @@
 }
 
 @media (min-width: 768px) {
+  .ColorKeyPage .land-color-keys {
+    padding: 35px 0 20px 80px;
+  }
+
   .ColorKeyPage .message {
     width: 770px;
     max-width: 100%;
   }
 
   .ColorKeyPage .land-color-keys .land {
-    margin-right: 14px;
+    width: calc(100% / 3);
+    margin-right: 0;
   }
 }

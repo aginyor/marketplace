@@ -9,7 +9,7 @@ import ParcelModal from 'components/ParcelModal'
 import ParcelDetailLink from 'components/ParcelDetailLink'
 import TxStatus from 'components/TxStatus'
 import ParcelName from 'components/ParcelName'
-import { walletType, publicationType } from 'components/types'
+import { authorizationType, publicationType } from 'components/types'
 import { t, T } from '@dapps/modules/translation/utils'
 import { isOpen } from 'shared/publication'
 import { formatMana } from 'lib/utils'
@@ -17,10 +17,11 @@ import MortgageForm from './MortgageForm'
 
 export default class BuyParcelByMortgagePage extends React.PureComponent {
   static propTypes = {
-    wallet: walletType,
-    publication: publicationType,
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
+    balance: PropTypes.number.isRequired,
+    authorization: authorizationType,
+    publication: publicationType,
     error: PropTypes.string,
     isTxIdle: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,
@@ -63,7 +64,8 @@ export default class BuyParcelByMortgagePage extends React.PureComponent {
     const {
       x,
       y,
-      wallet,
+      balance,
+      authorization,
       publication,
       isTxIdle,
       isLoading,
@@ -72,6 +74,7 @@ export default class BuyParcelByMortgagePage extends React.PureComponent {
       onCancel,
       error
     } = this.props
+
     if (isLoading) {
       return this.renderLoading()
     }
@@ -80,7 +83,9 @@ export default class BuyParcelByMortgagePage extends React.PureComponent {
       return this.renderNotConnected()
     }
 
-    const { isMortgageApprovedForMana, isMortgageApprovedForRCN } = wallet
+    const { allowances } = authorization
+    const isMortgageApprovedForMana = allowances.MortgageHelper.MANAToken > 0
+    const isMortgageApprovedForRCN = allowances.MortgageManager.RCNToken > 0
 
     return (
       <Parcel x={x} y={y} ownerNotAllowed>
@@ -92,7 +97,7 @@ export default class BuyParcelByMortgagePage extends React.PureComponent {
                   <Message
                     warning
                     icon="warning sign"
-                    header={t('global.unauthorized')}
+                    header={t('global.disallowed')}
                     content={
                       <T
                         id="mortgage.please_authorize_MANA"
@@ -111,7 +116,7 @@ export default class BuyParcelByMortgagePage extends React.PureComponent {
                   <Message
                     warning
                     icon="warning sign"
-                    header={t('global.unauthorized')}
+                    header={t('global.disallowed')}
                     content={
                       <T
                         id="mortgage.please_authorize_RCN"
@@ -143,6 +148,7 @@ export default class BuyParcelByMortgagePage extends React.PureComponent {
                 hasCustomFooter
               >
                 <MortgageForm
+                  balance={balance}
                   parcel={parcel}
                   publication={publication}
                   onPublish={onConfirm}

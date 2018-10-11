@@ -1,9 +1,11 @@
 #!/usr/bin/env babel-node
 
 import { eth, txUtils, contracts } from 'decentraland-eth'
-import { env, Log, cli } from 'decentraland-commons'
+import { Log, cli } from 'decentraland-commons'
+
 import { db } from '../src/database'
-import { Parcel } from '../src/Parcel'
+import { connectEth } from '../src/ethereum'
+import { Parcel } from '../src/Asset'
 import { Publication } from '../src/Publication'
 import { BlockchainEvent } from '../src/BlockchainEvent'
 import { mockModelDbOperations } from '../specs/utils'
@@ -60,6 +62,21 @@ const main = {
           log.info(`(land-owner) coords:(${x},${y})`)
           log.info(`blockchain => ${owner}`)
           log.info(`db         => ${dbOwner}`)
+        })
+      )
+
+    program
+      .command('land-estate <coord>')
+      .description('Get estate info for a LAND (x,y)')
+      .action(
+        asSafeAction(async coord => {
+          const [x, y] = parseCLICoords(coord)
+          const contract = eth.getContract('EstateRegistry')
+          const tokenId = await Parcel.encodeTokenId(x, y)
+
+          const estateId = await contract.getLandEstateId(tokenId)
+
+          log.info(`(land-estate) coords:(${x},${y}) => estateId: ${estateId}`)
         })
       )
 
@@ -121,7 +138,7 @@ const main = {
           const id = Parcel.buildId(x, y)
           const tokenId = await Parcel.encodeTokenId(x, y)
 
-          const contract = eth.getContract('Marketplace')
+          const contract = eth.getContract('LegacyMarketplace')
           const publication = await contract.auctionByAssetId(tokenId)
 
           const pubDb = (await Publication.findByAssetId(id))[0]
@@ -369,13 +386,7 @@ if (require.main === module) {
     })
     .then(() => {
       log.debug('Connecting to Ethereum node')
-      return eth.connect({
-        contracts: [
-          new contracts.LANDRegistry(env.get('LAND_REGISTRY_CONTRACT_ADDRESS')),
-          new contracts.Marketplace(env.get('MARKETPLACE_CONTRACT_ADDRESS'))
-        ],
-        provider: env.get('RPC_URL')
-      })
+      return connectEth()
     })
     .then(() => cli.runProgram([main]))
     .catch(error => {

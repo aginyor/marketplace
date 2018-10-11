@@ -2,6 +2,10 @@
   box-sizing: border-box;
 }
 
+html {
+  background: var(--dark-background);
+}
+
 html,
 body {
   height: 100%;
@@ -101,6 +105,11 @@ a:hover,
   background-color: #00dbef;
   color: #00dbef;
   fill: #00dbef;
+}
+.yours-on-sale {
+  background-color: #ff4053;
+  color: #ff4053;
+  fill: #ff4053;
 }
 .unowned {
   background-color: #1b1e2d;

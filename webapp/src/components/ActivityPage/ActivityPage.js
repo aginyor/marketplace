@@ -5,7 +5,7 @@ import { Container, Loader, Button } from 'semantic-ui-react'
 
 import { locations } from 'locations'
 import Prompt from 'components/Prompt'
-import { transactionType, walletType } from 'components/types'
+import { authorizationType, transactionType } from 'components/types'
 import { t, T } from '@dapps/modules/translation/utils'
 import Transaction from './Transaction'
 
@@ -13,10 +13,10 @@ import './ActivityPage.css'
 
 export default class ActivityPage extends React.PureComponent {
   static propTypes = {
-    pendingTransactions: PropTypes.arrayOf(transactionType),
-    transactionHistory: PropTypes.arrayOf(transactionType),
+    address: PropTypes.string,
+    authorization: authorizationType,
+    transactions: PropTypes.arrayOf(transactionType),
     network: PropTypes.string,
-    wallet: walletType,
     isEmpty: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired,
     isConnected: PropTypes.bool.isRequired
@@ -33,7 +33,9 @@ export default class ActivityPage extends React.PureComponent {
 
   handlePromptConfirm = () => {
     const { onClear, address } = this.props
-    onClear(address)
+    if (address) {
+      onClear(address)
+    }
     this.handlePromptClose()
   }
 
@@ -46,8 +48,10 @@ export default class ActivityPage extends React.PureComponent {
   }
 
   hasTradingPermissions() {
-    const { approvedBalance, isLandAuthorized } = this.props.wallet
-    return approvedBalance && isLandAuthorized
+    const { allowances, approvals } = this.props.authorization
+    return (
+      allowances.Marketplace.MANAToken > 0 && approvals.Marketplace.LANDRegistry
+    )
   }
 
   renderEmpty() {
@@ -94,7 +98,7 @@ export default class ActivityPage extends React.PureComponent {
   }
 
   renderTransactionLists() {
-    const { pendingTransactions, transactionHistory, network } = this.props
+    const { transactions, network } = this.props
 
     return (
       <React.Fragment>
@@ -113,24 +117,10 @@ export default class ActivityPage extends React.PureComponent {
           </div>
         </div>
 
-        {pendingTransactions.length > 0 ? (
+        {transactions.length > 0 ? (
           <div className="transaction-list pending-transaction-list">
-            <div className="section-subtitle">
-              {pendingTransactions.length}&nbsp;{t('activity.pending')}
-            </div>
-            {pendingTransactions.map(tx => (
-              <Transaction key={tx.hash} tx={tx} network={network} />
-            ))}
-          </div>
-        ) : null}
-
-        {transactionHistory.length > 0 ? (
-          <div className="transaction-list">
-            <div className="section-subtitle">
-              {transactionHistory.length}&nbsp;{t('activity.completed')}
-            </div>
-            {transactionHistory.map(tx => (
-              <Transaction key={tx.hash} tx={tx} network={network} />
+            {transactions.map((tx, index) => (
+              <Transaction key={index} tx={tx} network={network} />
             ))}
           </div>
         ) : null}

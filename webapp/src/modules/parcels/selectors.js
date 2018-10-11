@@ -6,7 +6,7 @@ import {
   TRANSFER_PARCEL_REQUEST
 } from './actions'
 import { isLoadingType } from '@dapps/modules/loading/selectors'
-import { getPublications as getAllPublications } from 'modules/publication/selectors'
+import { getData as getAllPublications } from 'modules/publication/selectors'
 import { getMortgagesArray } from 'modules/mortgage/selectors'
 import { buildCoordinate } from 'shared/parcel'
 import { getActiveMortgages } from 'shared/mortgage'
@@ -39,9 +39,9 @@ export const getPublications = (x, y) =>
   })
 
 export const getMortgagedParcels = createSelector(
-  getData,
-  getMortgagesArray,
-  getAllPublications,
+  state => getData(state),
+  state => getMortgagesArray(state),
+  state => getAllPublications(state),
   (parcels, mortgages, publications) =>
     getActiveMortgages(mortgages, parcels, publications).map(mortgage => ({
       ...parcels[mortgage.asset_id],

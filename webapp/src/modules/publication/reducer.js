@@ -2,9 +2,9 @@ import {
   FETCH_PUBLICATIONS_REQUEST,
   FETCH_PUBLICATIONS_SUCCESS,
   FETCH_PUBLICATIONS_FAILURE,
-  FETCH_PARCEL_PUBLICATIONS_REQUEST,
-  FETCH_PARCEL_PUBLICATIONS_SUCCESS,
-  FETCH_PARCEL_PUBLICATIONS_FAILURE,
+  FETCH_ASSET_PUBLICATIONS_REQUEST,
+  FETCH_ASSET_PUBLICATIONS_SUCCESS,
+  FETCH_ASSET_PUBLICATIONS_FAILURE,
   PUBLISH_REQUEST,
   PUBLISH_SUCCESS,
   PUBLISH_FAILURE,
@@ -18,10 +18,14 @@ import {
 import { loadingReducer } from '@dapps/modules/loading/reducer'
 import { FETCH_PARCEL_SUCCESS } from 'modules/parcels/actions'
 import { FETCH_MAP_SUCCESS } from 'modules/map/actions'
-import { FETCH_ADDRESS_PARCELS_SUCCESS } from 'modules/address/actions'
-import { FETCH_TRANSACTION_SUCCESS } from 'modules/transaction/actions'
+import {
+  FETCH_ADDRESS_PARCELS_SUCCESS,
+  FETCH_ADDRESS_ESTATES_SUCCESS
+} from 'modules/address/actions'
+import { FETCH_TRANSACTION_SUCCESS } from '@dapps/modules/transaction/actions'
 import { toPublicationsObject, PUBLICATION_STATUS } from 'shared/publication'
 import { FETCH_MORTGAGED_PARCELS_SUCCESS } from 'modules/mortgage/actions'
+import { FETCH_ESTATE_SUCCESS } from 'modules/estates/actions'
 
 const INITIAL_STATE = {
   data: {},
@@ -31,14 +35,14 @@ const INITIAL_STATE = {
 
 export function publicationReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case FETCH_PARCEL_PUBLICATIONS_REQUEST:
+    case FETCH_ASSET_PUBLICATIONS_REQUEST:
     case FETCH_PUBLICATIONS_REQUEST: {
       return {
         ...state,
         loading: loadingReducer(state.loading, action)
       }
     }
-    case FETCH_PARCEL_PUBLICATIONS_SUCCESS:
+    case FETCH_ASSET_PUBLICATIONS_SUCCESS:
     case FETCH_PUBLICATIONS_SUCCESS: {
       return {
         ...state,
@@ -50,7 +54,7 @@ export function publicationReducer(state = INITIAL_STATE, action) {
         }
       }
     }
-    case FETCH_PARCEL_PUBLICATIONS_FAILURE:
+    case FETCH_ASSET_PUBLICATIONS_FAILURE:
     case FETCH_PUBLICATIONS_FAILURE: {
       return {
         ...state,
@@ -73,9 +77,25 @@ export function publicationReducer(state = INITIAL_STATE, action) {
       }
       return state
     }
+    case FETCH_ESTATE_SUCCESS: {
+      const publication = action.estate.publication
+      if (publication) {
+        return {
+          ...state,
+          data: {
+            ...state.data,
+            [publication.tx_hash]: {
+              ...publication
+            }
+          }
+        }
+      }
+      return state
+    }
     case FETCH_MORTGAGED_PARCELS_SUCCESS:
     case FETCH_MAP_SUCCESS:
-    case FETCH_ADDRESS_PARCELS_SUCCESS: {
+    case FETCH_ADDRESS_PARCELS_SUCCESS:
+    case FETCH_ADDRESS_ESTATES_SUCCESS: {
       const publications = action.publications
       if (publications.length > 0) {
         return {
@@ -126,7 +146,7 @@ export function publicationReducer(state = INITIAL_STATE, action) {
       return newState
     }
     case FETCH_TRANSACTION_SUCCESS: {
-      const transaction = action.transaction
+      const { transaction } = action.payload
 
       switch (transaction.actionType) {
         case BUY_SUCCESS: {

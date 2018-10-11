@@ -9,6 +9,7 @@ const FILTER_DEFAULTS = {
   offset: 0,
   sortBy: 'created_at',
   sortOrder: 'asc',
+  assetType: null,
   status: PUBLICATION_STATUS.open
 }
 
@@ -32,22 +33,31 @@ export class API {
     return this.request('get', `/parcels/${x}/${y}`)
   }
 
-  fetchParcels(options = FILTER_DEFAULTS) {
-    const { limit, offset, sortBy, sortOrder, status } = getFilterOptions(
-      options
-    )
-
-    return this.request('get', '/parcels', {
+  fetchMarketplace(options = FILTER_DEFAULTS) {
+    const {
       limit,
       offset,
-      sort_by: sortBy,
-      sort_order: sortOrder,
+      sortBy,
+      sortOrder,
+      assetType,
       status
+    } = getFilterOptions(options)
+
+    return this.request('get', `/marketplace`, {
+      limit,
+      offset,
+      status,
+      asset_type: assetType,
+      sort_by: sortBy,
+      sort_order: sortOrder
     })
   }
 
-  fetchParcelPublications(x, y, status) {
-    return this.request('get', `/parcels/${x}/${y}/publications`, { status })
+  fetchAssetPublications(id, asset_type, status) {
+    return this.request('get', `/assets/${id}/publications`, {
+      asset_type,
+      status
+    })
   }
 
   fetchAddressParcels(address, status) {
@@ -71,7 +81,7 @@ export class API {
   }
 
   fetchMortgagedParcels(borrower) {
-    return this.request('get', `/parcels/${borrower}/mortgages`)
+    return this.request('get', `/mortgages/${borrower}/parcels`)
   }
 
   fetchMortgagesByBorrower(borrower, status) {

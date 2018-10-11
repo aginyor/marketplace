@@ -20,7 +20,7 @@ import { getDistrict, getOpenPublication } from 'shared/asset'
 import ParcelOwner from './ParcelOwner'
 import ParcelActions from './ParcelActions'
 import ParcelDescription from './ParcelDescription'
-import ParcelTransactionHistory from './ParcelTransactionHistory'
+import AssetTransactionHistory from 'components/AssetTransactionHistory'
 import ParcelMortgage from './ParcelMortgage'
 
 export default class ParcelDetail extends React.PureComponent {
@@ -85,7 +85,7 @@ export default class ParcelDetail extends React.PureComponent {
               {publication ? (
                 <React.Fragment>
                   <Grid.Column width={4}>
-                    <h3>{t('parcel_detail.publication.price')}</h3>
+                    <h3>{t('asset_detail.publication.price')}</h3>
                     <Mana
                       amount={parseFloat(publication.price)}
                       size={20}
@@ -130,7 +130,7 @@ export default class ParcelDetail extends React.PureComponent {
           </Grid>
         )}
 
-        <ParcelTransactionHistory parcel={parcel} publications={publications} />
+        <AssetTransactionHistory asset={parcel} publications={publications} />
       </div>
     )
   }

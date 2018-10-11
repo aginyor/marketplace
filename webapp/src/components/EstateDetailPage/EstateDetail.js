@@ -1,14 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import { Icon, Header, Grid, Container, Button } from 'semantic-ui-react'
 
 import AssetDetailPage from 'components/AssetDetailPage'
-import ParcelCard from 'components/ParcelCard'
 import AddressBlock from 'components/AddressBlock'
-import { estateType, parcelType } from 'components/types'
+import { estateType, parcelType, publicationType } from 'components/types'
 import { t } from '@dapps/modules/translation/utils'
 import { buildCoordinate } from 'shared/parcel'
 import EstateActions from './EstateActions'
+import { getOpenPublication } from 'shared/asset'
+import Mana from 'components/Mana'
+import Expiration from 'components/Expiration'
+import AssetTransactionHistory from 'components/AssetTransactionHistory'
+import LandAmount from 'components/LandAmount'
+import { locations } from 'locations'
+import { calculateMapProps } from '../../shared/estate'
+import ParcelAttributes from 'components/ParcelAttributes'
 import './EstateDetail.css'
 
 const WITH_ACTION_BUTTONS_WIDTH = 8
@@ -17,6 +25,7 @@ const WITHOUT_ACTION_BUTTONS_WIDTH = 16
 export default class EstateDetail extends React.PureComponent {
   static propTypes = {
     estate: estateType.isRequired,
+    publications: PropTypes.objectOf(publicationType).isRequired,
     allParcels: PropTypes.objectOf(parcelType),
     isOwner: PropTypes.bool.isRequired,
     onViewAssetClick: PropTypes.func.isRequired,
@@ -40,6 +49,7 @@ export default class EstateDetail extends React.PureComponent {
   render() {
     const {
       estate,
+      publications,
       isOwner,
       allParcels,
       onViewAssetClick,
@@ -52,21 +62,29 @@ export default class EstateDetail extends React.PureComponent {
       return this.renderEmptyEstate()
     }
 
+    const publication = getOpenPublication(estate, publications)
+    const { center } = calculateMapProps(estate.data.parcels)
     return (
       <div className="EstateDetail">
         <div className="parcel-preview" title={t('parcel_detail.view')}>
           <AssetDetailPage asset={estate} onAssetClick={onViewAssetClick} />
         </div>
         <Container>
-          <Grid className="details">
+          <Grid className="details" stackable>
             <Grid.Row>
-              <Grid.Column
-                width={WITH_ACTION_BUTTONS_WIDTH}
-                className="parcels"
-              >
+              <Grid.Column computer={8} mobile={16} className="parcels">
                 <Header size="large">
                   <p className="estate-title">
-                    {estate.data.name || t('estate_select.detail')}
+                    <span>{estate.data.name || t('estate_select.detail')}</span>
+                    <Link
+                      to={locations.parcelMapDetail(
+                        center.x,
+                        center.y,
+                        estate.id
+                      )}
+                    >
+                      <LandAmount value={estate.data.parcels.length} />
+                    </Link>
                   </p>
                   {estate.data.description && (
                     <p className="estate-description">
@@ -75,19 +93,62 @@ export default class EstateDetail extends React.PureComponent {
                   )}
                 </Header>
               </Grid.Column>
-              <Grid.Column className="parcel-actions-container" computer={8}>
+              <Grid.Column
+                computer={8}
+                mobile={16}
+                className="estate-owner-container"
+              >
                 {isOwner ? (
-                  <EstateActions
-                    id={estate.id}
-                    onEditMetadata={onEditMetadata}
-                  />
+                  <div>
+                    <Button
+                      size="tiny"
+                      className="link"
+                      onClick={onEditMetadata}
+                    >
+                      <Icon name="pencil" />
+                      {t('global.edit')}
+                    </Button>
+                  </div>
                 ) : (
-                  <span className="is-address">
+                  <span className="owned-by">
                     <span>{t('global.owned_by')}</span>
                     <AddressBlock address={estate.owner} scale={4} />
                   </span>
                 )}
               </Grid.Column>
+            </Grid.Row>
+            <Grid.Row>
+              {publication && (
+                <React.Fragment>
+                  <Grid.Column width={4}>
+                    <h3>{t('asset_detail.publication.price')}</h3>
+                    <Mana
+                      amount={parseFloat(publication.price)}
+                      size={20}
+                      className="mana-price-icon"
+                    />
+                  </Grid.Column>
+                  <Grid.Column width={4} className="time-left">
+                    <h3>{t('global.time_left')}</h3>
+                    <Expiration
+                      expiresAt={parseInt(publication.expires_at, 10)}
+                      className={'PublicationExpiration'}
+                    />
+                  </Grid.Column>
+                </React.Fragment>
+              )}
+              <Grid.Column
+                className="parcel-actions-container"
+                computer={publication ? 8 : 16}
+              >
+                <EstateActions
+                  isOwner={isOwner}
+                  publications={publications}
+                  estate={estate}
+                />
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row>
               {allParcels && (
                 <React.Fragment>
                   <Grid.Column
@@ -117,11 +178,7 @@ export default class EstateDetail extends React.PureComponent {
                     {parcels.map(({ x, y }) => {
                       const parcel = allParcels[buildCoordinate(x, y)]
                       return parcel ? (
-                        <ParcelCard
-                          key={parcel.id}
-                          parcel={parcel}
-                          withMap={false}
-                        />
+                        <ParcelAttributes key={parcel.id} parcel={parcel} />
                       ) : null
                     })}
                   </Grid.Column>
@@ -129,6 +186,7 @@ export default class EstateDetail extends React.PureComponent {
               )}
             </Grid.Row>
           </Grid>
+          <AssetTransactionHistory asset={estate} publications={publications} />
         </Container>
       </div>
     )

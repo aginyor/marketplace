@@ -1,23 +1,21 @@
 import { connect } from 'react-redux'
 import { isLoading } from 'modules/publication/selectors'
-import { getParcels, getTotal } from 'modules/ui/marketplace/selectors'
+import { getAssets } from 'modules/ui/marketplace/selectors'
 import { fetchPublicationsRequest } from 'modules/publication/actions'
 import { navigateTo } from 'modules/location/actions'
 
 import HomePage from './HomePage'
 
-const mapState = (state, { location }) => {
-  const parcels = getParcels(state)
-  const total = getTotal(state)
+const mapState = state => {
+  const assets = getAssets(state)
 
   return {
-    parcels,
-    total,
+    assets,
     isLoading: isLoading(state)
   }
 }
 
-const mapDispatch = (dispatch, { location }) => ({
+const mapDispatch = dispatch => ({
   onFetchPublications: () =>
     dispatch(
       fetchPublicationsRequest({

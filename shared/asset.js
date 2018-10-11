@@ -1,7 +1,7 @@
+import { contracts } from 'decentraland-eth'
 import { isOpen } from './publication'
 import { isParcel } from './parcel'
 import { isEstate, calculateMapProps } from './estate'
-import { contracts } from 'decentraland-eth'
 
 export const ROADS_ID = 'f77140f9-c7b4-4787-89c9-9fa0e219b079'
 export const PLAZA_ID = '55327350-d9f0-4cae-b0f3-8745a0431099'
@@ -46,12 +46,7 @@ export function isExpired(expires_at) {
 }
 
 export function hasStatus(obj, status) {
-  return (
-    obj &&
-    obj.status === status &&
-    obj.tx_status === 'confirmed' &&
-    !isExpired(obj.expires_at)
-  )
+  return obj && obj.status === status && !isExpired(obj.expires_at)
 }
 
 export function isRoad(district_id) {
@@ -149,9 +144,15 @@ export function getType(asset, publications, wallet) {
   if (!asset) {
     return TYPES.loading
   }
-
+  const isAssetOwner = wallet && isOwner(wallet, asset.id)
   if (isEstate(asset)) {
-    return wallet && isOwner(wallet, asset.id) ? TYPES.myEstates : TYPES.taken
+    if (isOnSale(asset, publications) && isAssetOwner) {
+      return TYPES.myParcelsOnSale
+    }
+    if (isOnSale(asset, publications)) {
+      return TYPES.onSale
+    }
+    return isAssetOwner ? TYPES.myEstates : TYPES.taken
   }
 
   if (isDistrict(asset)) {
@@ -167,7 +168,7 @@ export function getType(asset, publications, wallet) {
     return TYPES.district
   }
 
-  if (wallet && isOwner(wallet, asset.id)) {
+  if (isAssetOwner) {
     return isOnSale(asset, publications)
       ? TYPES.myParcelsOnSale
       : TYPES.myParcels
@@ -206,4 +207,11 @@ export function decodeMetadata(data) {
 
 export function encodeMetadata(data) {
   return contracts.LANDRegistry.encodeLandData(data)
+}
+
+export function getAssetPublications(assets) {
+  return assets.reduce((pubs, asset) => {
+    if (asset.publication) pubs.push(asset.publication)
+    return pubs
+  }, [])
 }

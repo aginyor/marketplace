@@ -16,16 +16,19 @@ import { loadingReducer } from '@dapps/modules/loading/reducer'
 import {
   BUY_SUCCESS,
   CANCEL_SALE_SUCCESS,
-  PUBLISH_SUCCESS
+  PUBLISH_SUCCESS,
+  FETCH_PUBLICATIONS_SUCCESS,
+  FETCH_ASSET_PUBLICATIONS_SUCCESS
 } from 'modules/publication/actions'
 import { FETCH_ADDRESS_PARCELS_SUCCESS } from 'modules/address/actions'
-import {
-  FETCH_PUBLICATIONS_SUCCESS,
-  FETCH_PARCEL_PUBLICATIONS_SUCCESS
-} from 'modules/publication/actions'
-import { FETCH_TRANSACTION_SUCCESS } from 'modules/transaction/actions'
+import { FETCH_TRANSACTION_SUCCESS } from '@dapps/modules/transaction/actions'
 import { FETCH_MAP_SUCCESS } from 'modules/map/actions'
-import { buildCoordinate, normalizeParcel, toParcelObject } from 'shared/parcel'
+import {
+  buildCoordinate,
+  normalizeParcel,
+  toParcelObject,
+  isParcel
+} from 'shared/parcel'
 
 import {
   FETCH_ACTIVE_PARCEL_MORTGAGES_SUCCESS,
@@ -38,7 +41,8 @@ import {
   CREATE_ESTATE_SUCCESS
 } from 'modules/estates/actions'
 import { getEstateIdFromTxReceipt } from 'modules/estates/utils'
-import { getEstateRegistryAddress } from 'modules/wallet/utils'
+import { getContractAddress } from 'modules/wallet/utils'
+import { ASSET_TYPES } from 'shared/asset'
 
 const INITIAL_STATE = {
   data: {},
@@ -78,16 +82,19 @@ export function parcelsReducer(state = INITIAL_STATE, action) {
         }
       }
     }
-    case FETCH_PUBLICATIONS_SUCCESS:
+    case FETCH_PUBLICATIONS_SUCCESS: {
+      const { assets } = action
+      const parcels = assets.filter(asset => isParcel(asset))
       return {
         ...state,
         loading: loadingReducer(state.loading, action),
         error: null,
         data: {
           ...state.data,
-          ...toParcelObject(action.parcels, state.data)
+          ...toParcelObject(parcels, state.data)
         }
       }
+    }
     case FETCH_PARCEL_FAILURE: {
       return {
         ...state,
@@ -118,24 +125,26 @@ export function parcelsReducer(state = INITIAL_STATE, action) {
         loading: loadingReducer(state.loading, action)
       }
     }
-    case FETCH_PARCEL_PUBLICATIONS_SUCCESS: {
-      const { x, y, publications } = action
-      const parcelId = buildCoordinate(x, y)
-      const parcel = state.data[parcelId]
+    case FETCH_ASSET_PUBLICATIONS_SUCCESS: {
+      const { id, assetType, publications } = action
 
-      return {
-        ...state,
-        loading: loadingReducer(state.loading, action),
-        data: {
-          ...state.data,
-          [parcelId]: {
-            ...parcel,
-            publication_tx_hash_history: publications.map(
-              publication => publication.tx_hash
-            )
+      if (assetType === ASSET_TYPES.parcel) {
+        const parcel = state.data[id]
+        return {
+          ...state,
+          loading: loadingReducer(state.loading, action),
+          data: {
+            ...state.data,
+            [id]: {
+              ...parcel,
+              publication_tx_hash_history: publications.map(
+                publication => publication.tx_hash
+              )
+            }
           }
         }
       }
+      return state
     }
     case FETCH_ACTIVE_PARCEL_MORTGAGES_SUCCESS: {
       const { x, y, mortgages } = action
@@ -171,7 +180,7 @@ export function parcelsReducer(state = INITIAL_STATE, action) {
       }
     }
     case FETCH_TRANSACTION_SUCCESS: {
-      const transaction = action.transaction
+      const { transaction } = action.payload
 
       switch (transaction.actionType) {
         case EDIT_PARCEL_SUCCESS: {
@@ -205,47 +214,53 @@ export function parcelsReducer(state = INITIAL_STATE, action) {
         case BUY_SUCCESS: {
           const owner = transaction.from
           const tx_hash = transaction.payload.tx_hash
-          // unset publication_tx_hash and update owner
-          return {
-            ...state,
-            data: Object.values(state.data).reduce((newParcels, parcel) => {
-              if (parcel.publication_tx_hash === tx_hash) {
-                newParcels[parcel.id] = {
-                  ...parcel,
-                  publication_tx_hash: null,
-                  owner
+          if (transaction.payload.type === ASSET_TYPES.parcel) {
+            // unset publication_tx_hash and update owner
+            return {
+              ...state,
+              data: Object.values(state.data).reduce((newParcels, parcel) => {
+                if (parcel.publication_tx_hash === tx_hash) {
+                  newParcels[parcel.id] = {
+                    ...parcel,
+                    publication_tx_hash: null,
+                    owner
+                  }
+                } else {
+                  newParcels[parcel.id] = { ...parcel }
                 }
-              } else {
-                newParcels[parcel.id] = { ...parcel }
-              }
-              return newParcels
-            }, {})
+                return newParcels
+              }, {})
+            }
           }
+          return state
         }
         case CANCEL_SALE_SUCCESS: {
           const tx_hash = transaction.payload.tx_hash
           // unset publication_tx_hash
-          return {
-            ...state,
-            data: Object.values(state.data).reduce((newParcels, parcel) => {
-              if (parcel.publication_tx_hash === tx_hash) {
-                newParcels[parcel.id] = {
-                  ...parcel,
-                  publication_tx_hash: null
+          if (transaction.payload.type === ASSET_TYPES.parcel) {
+            return {
+              ...state,
+              data: Object.values(state.data).reduce((newParcels, parcel) => {
+                if (parcel.publication_tx_hash === tx_hash) {
+                  newParcels[parcel.id] = {
+                    ...parcel,
+                    publication_tx_hash: null
+                  }
+                } else {
+                  newParcels[parcel.id] = parcel
                 }
-              } else {
-                newParcels[parcel.id] = parcel
-              }
-              return newParcels
-            }, {})
+                return newParcels
+              }, {})
+            }
           }
+          return state
         }
         case PUBLISH_SUCCESS: {
           // set publication_tx_hash
-          const { x, y, tx_hash } = transaction.payload
+          const { type, x, y, tx_hash } = transaction.payload
           const parcelId = buildCoordinate(x, y)
 
-          if (parcelId in state.data) {
+          if (type === ASSET_TYPES.parcel && parcelId in state.data) {
             const parcel = state.data[parcelId]
             return {
               ...state,
@@ -273,7 +288,7 @@ export function parcelsReducer(state = INITIAL_STATE, action) {
               estate_id: type === ADD_PARCELS ? estate.id : null,
               owner:
                 type === ADD_PARCELS
-                  ? getEstateRegistryAddress()
+                  ? getContractAddress('EstateRegistry')
                   : transaction.from
             }
           })
@@ -324,7 +339,7 @@ export function parcelsReducer(state = INITIAL_STATE, action) {
             return {
               ...state.data[parcelId],
               estate_id: estateId,
-              owner: getEstateRegistryAddress()
+              owner: getContractAddress('EstateRegistry')
             }
           })
 

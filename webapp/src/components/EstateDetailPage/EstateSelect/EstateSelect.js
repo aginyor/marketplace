@@ -10,20 +10,24 @@ import {
 } from 'semantic-ui-react'
 
 import AssetDetailPage from 'components/AssetDetailPage'
-import ParcelCard from 'components/ParcelCard'
+import ParcelAttributes from 'components/ParcelAttributes'
 import TxStatus from 'components/TxStatus'
 import EstateName from 'components/EstateName'
 import { parcelType, estateType } from 'components/types'
 import { t } from '@dapps/modules/translation/utils'
 import { isOwner } from 'shared/asset'
-import { getCoordsMatcher, isEqualCoords, buildCoordinate } from 'shared/parcel'
+import {
+  getParcelMatcher,
+  isEqualCoords,
+  buildCoordinate,
+  getParcelsNotIncluded
+} from 'shared/parcel'
 import {
   hasNeighbour,
   areConnected,
   isEstate,
   MAX_PARCELS_PER_TX
 } from 'shared/estate'
-import { getParcelsNotIncluded } from 'shared/utils'
 import EstateSelectActions from './EstateSelectActions'
 import './EstateSelect.css'
 
@@ -59,13 +63,14 @@ export default class EstateSelect extends React.PureComponent {
       return
     }
 
-    const isSelected = parcels.some(getCoordsMatcher({ x, y }))
+    const parcel = { x, y }
+    const isSelected = parcels.some(getParcelMatcher(parcel))
     if (isSelected) {
       if (this.hasReachedRemoveLimit()) {
         return
       }
       const newParcels = parcels.filter(
-        coords => !isEqualCoords(coords, { x, y })
+        coords => !isEqualCoords(coords, parcel)
       )
       if (!areConnected(newParcels)) {
         return
@@ -234,10 +239,9 @@ export default class EstateSelect extends React.PureComponent {
                   parcels.map(({ x, y }) => {
                     const parcel = allParcels[buildCoordinate(x, y)]
                     return parcel ? (
-                      <ParcelCard
+                      <ParcelAttributes
                         key={parcel.id}
                         parcel={parcel}
-                        withMap={false}
                         withLink={false}
                       />
                     ) : null

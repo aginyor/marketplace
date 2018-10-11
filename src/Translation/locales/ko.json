@@ -15,6 +15,65 @@
   "address": {
     "its_you": "너야"
   },
+  "asset_buy": {
+    "about_to_buy": "{name}을(를) 구입하려고 합니다.",
+    "allowed_balance": "수당은 {allowance}입니다.",
+    "buy_asset": "토지 구입",
+    "buy_mana": "MANA를 사기 위해 {click_here}.",
+    "didnt_allow": "MANA 사용 권한을 허가하지 않았습니다.",
+    "didnt_allow_new_marketplace":
+      "마켓 플레이스의 새 버전에 대한 MANA 사용을 승인하지 않았습니다.",
+    "needs_at_least": "이 토지를 사려면 적어도 {mana}가 필요합니다.",
+    "please_allow":
+      "{settings_link}로 이동하여 LegacyMarketplace 계약이 MANA를 대신하여 작동하도록 허용하십시오.",
+    "please_allow_new_marketplace":
+      "{settings_link}로 이동하여 마켓 플레이스 계약이 귀하를 대신하여 MANA를 운영하도록 허용하십시오.",
+    "total_balance": "Your balance is {balance}"
+  },
+  "asset_cancel": {
+    "about_to_cancel": "{name}의 판매를 취소하려고합니다.",
+    "cancel_sale": "판매 취소",
+    "not_for_sale": "소포 {parcel}은 판매용이 아닙니다."
+  },
+  "asset_detail": {
+    "actions": {
+      "cancel": "판매 취소",
+      "permissions": "권한",
+      "sell": "팔다",
+      "transfer": "이전"
+    },
+    "history": {
+      "auction": "경매",
+      "event": "행사",
+      "from": "에서",
+      "price": "가격",
+      "sold": "판매 된",
+      "title": "거래 내역",
+      "to": "에",
+      "when": "언제"
+    },
+    "publication": {
+      "buy": "사다",
+      "price": "가격"
+    }
+  },
+  "asset_publish": {
+    "already_sold": "이 {asset_name}은 이미 {value}에 판매 중입니다.",
+    "errors": {
+      "maximum_expiration": "최대 만기 날짜는 {date}입니다.",
+      "maximum_land_price": "최대 {asset_name} 가격은 {value} MANA입니다.",
+      "minimum_expiration": "최소 만료일은 {date}입니다.",
+      "minimum_land_price": "최소 {asset_name} 가격은 {value} MANA입니다."
+    },
+    "expiration": "만료",
+    "expiration_placeholder": "이 발행물의 만료일",
+    "list_asset": "판매 목록 {asset_name}",
+    "please_authorize":
+      "판매를 위해 목록에 올리기 전에 {settings_link}으로 가서 마켓 플레이스가 귀하를 대신하여 {asset_name}을 운영하도록 승인해야합니다.",
+    "price": "가격",
+    "price_placeholder": "이 {asset_name}에 대한 MANA의 가격",
+    "set_asset_price": "{asset_name}의 가격과 만료 날짜를 설정하십시오."
+  },
   "atlas": {
     "loading": "로드 중",
     "no_owner": "소유자 없음",
@@ -23,6 +82,18 @@
     "road": "도로",
     "your_estate": "당신의 재산",
     "your_parcel": "당신의 토지"
+  },
+  "authorization": {
+    "allow": "{contract_link}이 {symbol}을 대신하여 작동하도록 승인합니다.",
+    "allowed":
+      "귀하는 {contract_link}이 귀하를 대신하여 {symbol}을 운영하도록 승인했습니다",
+    "approve": "{contract_link}이 {symbol}을 대신하여 작동하도록 승인합니다.",
+    "approved":
+      "귀하는 {contract_link}이 귀하를 대신하여 {symbol}을 운영하도록 승인했습니다",
+    "disallowed":
+      "당신은 {contract_link}을 당신을 대신하여 {symbol}을 조작하도록 승인하지 않았습니다.",
+    "disapproved":
+      "당신은 {contract_link}을 당신을 대신하여 {symbol}을 조작하도록 승인하지 않았습니다."
   },
   "buy_mana": {
     "action": "더 사",
@@ -46,7 +117,8 @@
     "taken": "점유된",
     "title": "색상 키",
     "unowned": "소유자가 없는",
-    "yours": "당신 토지"
+    "yours": "당신 토지",
+    "yours_on_sale": "판매중인 제품"
   },
   "contribution": {
     "proposal": "제안"
@@ -92,12 +164,11 @@
     "terms": "이용 약관"
   },
   "global": {
-    "acquired_at": "TK0에서 획득",
+    "acquired_ago": "{date}에서 획득",
     "activity": "활동",
     "add": "더하다",
     "address_placeholder": "0x...",
     "atlas": "지도",
-    "authorized": "허가",
     "balance": "밸런스",
     "blog": "블로그",
     "cancel": "취소",
@@ -185,6 +256,7 @@
     "duration_placeholder": "기간 (일)",
     "errors": {
       "amount_minimum": "금액은 {amount}보다 커야합니다.",
+      "deposit_gt_balance": "필수 입금액이 잔액보다 큽니다.",
       "duration_gte_payable":
         "기간은 며칠에 지불 가능한 것보다 크거나 같아야합니다.",
       "maximum_interest_rate": "비율은 {maximum}보다 낮아야합니다.",
@@ -216,56 +288,30 @@
     "request": "모기지 신청",
     "request_land":
       "{parcel_name}에 대한 모기지를 {parcel_price}에 요청하려고합니다.",
-    "requested": "요청 됨"
+    "requested": "요청 됨",
+    "required_deposit": "필수 보증금 : {deposit}"
+  },
+  "name": {
+    "estate": "Estate",
+    "parcel": "LAND"
   },
   "parcel": {
     "no_description": "설명 없음",
     "no_name": "이름 없음",
     "view": "보기"
   },
-  "parcel_buy": {
-    "about_to_buy": "{parcel_name}을(를) 구입하려고 합니다.",
-    "approved_balance": "승인 된 잔액은 {approved_balance}입니다.",
-    "buy_land": "토지 구입",
-    "buy_mana": "MANA를 사기 위해 {click_here}.",
-    "didnt_approve": "당신은 MANA를 승인하지 않았습니다",
-    "needs_at_least": "이 토지를 사려면 적어도 {mana}가 필요합니다.",
-    "please_approve": "{settings_link} (으)로 이동하여 MANA를 승인하십시오.",
-    "total_balance": "Your balance is {balance}"
-  },
-  "parcel_cancel": {
-    "about_to_cancel": "{parcel}의 판매를 취소하려고합니다.",
-    "cancel_land": "토지 판매 취소",
-    "not_for_sale": "소포 {parcel}은 판매용이 아닙니다."
-  },
   "parcel_detail": {
     "actions": {
-      "cancel": "판매취소",
-      "create_estate": "부동산 만들기",
-      "permissions": "권한",
-      "sell": "판매",
-      "transfer": "이전"
+      "create_estate": "부동산 만들기"
     },
     "description": "설명",
     "empty_description": "이 필지에는 설명이 없습니다",
-    "history": {
-      "auction": "경매",
-      "event": "행사",
-      "from": "에서",
-      "price": "가격",
-      "sold": "판매",
-      "title": "거래 내역",
-      "to": "에",
-      "when": "언제"
-    },
     "owner": {
       "no_owner": "소유자 없음",
       "part_of": "{name}의 일부"
     },
     "publication": {
-      "buy": "구매",
-      "mortgage": "모기지 신청",
-      "price": "가격"
+      "mortgage": "모기지 신청"
     },
     "tags": {
       "title": "하이라이트"
@@ -288,23 +334,6 @@
       "{parcel_name}의 내용을 업데이트 할 수있는 권한을 부여하십시오.",
     "manage_land": "토지 관리"
   },
-  "parcel_publish": {
-    "already_sold": "이 토지는 이미 {value}에 판매 중입니다.",
-    "errors": {
-      "maximum_expiration": "최대 만료일은 {date}입니다.",
-      "maximum_land_price": "최대 LAND 가격은 {value} MANA입니다.",
-      "minimum_expiration": "최소 만료일은 하루입니다.",
-      "minimum_land_price": "최저 가격은 {value} MANA입니다."
-    },
-    "expiration": "만료",
-    "expiration_placeholder": "이 게시물의 만료일",
-    "list_land": "판매용 토지 목록",
-    "please_authorize":
-      "{settings_link}로 이동하여 판매용으로 등록하기 전에 마켓 플레이스에서 토지를 대신 사용하도록 승인해야합니다.",
-    "price": "가격",
-    "price_placeholder": "이 토지의 MANA 가격",
-    "set_land_price": "{parcel_name}의 가격 및 만료일 설정"
-  },
   "parcel_tags": {
     "adjacent": "인접한",
     "district": "지구",
@@ -321,32 +350,16 @@
     "view": "보기"
   },
   "settings": {
-    "approve_mana":
-      "{marketplace_contract_link}에게 MANA를 대신하여 귀하를 대신하여 운영하도록 승인합니다.",
-    "approve_mana_check": "{mana_to_approve} MANA 승인을 위해 확인하십시오.",
-    "approve_mortgage_mana":
-      "{mortgage_contract_link}이 (가) 귀하를 대신하여 MANA를 운영하도록 승인하십시오.",
-    "approve_mortgage_rcn":
-      "{mortgage_contract_link}이 (가) 귀하를 대신하여 RCN을 운영하도록 승인하십시오.",
     "authorization": "권한 부여",
-    "authorize":
-      "{marketplace_contract_link}에게 귀하를 대신하여 토지를 운영하도록 승인하십시오.",
-    "authorize_land_check": "선택하면 시장 계약에 대한 토지 사용을 허가합니다",
-    "disapprove_mana_check":
-      "선택 해제하면 마켓 플레이스 계약에 대한 MANA 사용 권한이 승인되지 않음",
-    "mana_approved":
-      "{marketplace_contract_link}이 (가) MANA를 대신하여 귀하를 대신하여 운영하도록 승인했습니다.",
-    "marketplace_contract": "시장 계약",
-    "mortgage_helper_contract": "모기지 크리에이터 계약",
-    "mortgage_manager_contract": "모기지 매니저 계약",
-    "pending_tx": "보류중인 거래가 있습니다.",
-    "unauthorize_land_check":
-      "선택 해제하면 시장 계약에 대한 토지 사용 권한이 없어 집니다",
-    "you_approved_mortgage_mana":
-      "{mortgage_contract_link}이 (가) MANA를 대신하여 귀하를 대신하여 운영하도록 승인했습니다.",
-    "you_approved_mortgage_rcn":
-      "{mortgage_contract_link}이 (가) 귀하를 대신하여 RCN을 운영하도록 승인했습니다.",
-    "you_authorized": "{marketplace_contract_link}을(를) 승인했습니다."
+    "authorization_error": "승인을로드 할 수 없습니다. 다시 시도하십시오.",
+    "authorization_error_contact":
+      "오류가 지속되면 언제든지 Google에 문의하십시오.",
+    "for_buying": "구매를 위해",
+    "for_buying_LegacyMarketplace": "MANA (기존)를 사용하는 애셋",
+    "for_buying_Marketplace": "MANA를 사용하는 저작물",
+    "for_selling": "판매용",
+    "legacy_authorization": "레거시 인증",
+    "pending_tx": "보류중인 거래가 있습니다."
   },
   "sign_in": {
     "account_unlocked": "계정이 잠금 해제되어 있는지 확인하십시오.",
@@ -360,41 +373,39 @@
     }
   },
   "transaction": {
-    "approved":
-      "{marketplace_contract_link} 이 (가) MANA를 대신하여 귀하를 대신하여 운영하도록 승인했습니다.",
-    "authorize":
-      "귀하를 대신하여 토지를 운영하기위한 {action} {marketplace_contract_link} 이 있습니다.",
     "buy": "{parcel_link}을(를) 구입했습니다.",
     "buy_mana": "너는 {mana} MANA를 구입했다.",
-    "cancel": "{parcel_link}의 {publication_link}을 취소했습니다.",
+    "cancel": "{parcel_link}에서 판매를 취소했습니다",
     "cancel_mortgage": "소포 {parcel_link}을 사기 위해 모기지를 취소합니다.",
-    "claim_mortgage_resolution": "당신은 {parcel_link}을 주장했습니다.",
+    "claim_mortgage_resolution": "당신은 {parcel_link}을 주장했습니다",
     "create_estate": "부동산 {name}을 만들었습니다.",
-    "create_mortgage": "소포 {parcel_link}을 사기 위해 모기지를 요청했습니다.",
-    "disapproved":
-      "귀하를 대신하여 {marketplace_contract_link}의 MANA 운영을 허가받지 않았습니다.",
+    "create_mortgage": "소포 {parcel_link}을 사기 위해 모기지를 요청했습니다",
     "dissolve_estate": "너는 재산을 해산했다. {name}",
     "edit":
       "{parcel_link}을(를) \"{name}\" 이름 및 설명 \"{description}\" (으)로 수정했습니다.",
     "edit_estate_metadata":
       "이름이 \"{name}\"이고 설명이 \"{description}\"인 부동산 {estate_id}을 편집했습니다.",
     "edit_estate_parcels_added":
-      "부동산 {name}에 {amount} 소포를 추가했습니다.",
+      "부동산 {name}에 {amount} 소포를 추가했습니다",
     "edit_estate_parcels_removed":
-      "부동산 {name}에서 {amount} 소포를 제거했습니다.",
+      "부동산 {name}에서 {amount} 소포를 제거했습니다",
     "manage":
-      "{address_link}에게 {parcel_link}의 내용을 업데이트 할 수있는 권한을 주셨습니다.",
+      "{address_link}에게 {parcel_link}의 내용을 업데이트 할 수있는 권한을 주셨습니다",
     "manage_revoked":
-      "{parcel_link}의 내용을 업데이트 할 권한을 취소했습니다 (1).",
+      "{parcel_link}의 내용을 업데이트 할 권한을 취소했습니다 (1)",
     "mortgage_mana":
-      "{action} 귀하를 대신하여 MANA를 운영하는 {mortgage_contract_link}.",
+      "{action} 귀하를 대신하여 MANA를 운영하는 {mortgage_contract_link}",
     "mortgage_rcn":
-      "{action} 귀하를 대신하여 RCN을 운영하는 {mortgage_contract_link}.",
+      "{action} 귀하를 대신하여 RCN을 운영하는 {mortgage_contract_link}",
     "pay_mortgage":
-      "소포 {parcel_link}을 구입하기 위해 모기지에 대해 {amount}의 부분 지불을했습니다.",
-    "publish": "{parcel_link}을(를) 게시했습니다.",
-    "transfer": "당신은 {asset_type} {asset_link}을 {owner_link}로 옮겼습니다.",
-    "transfer_mana": "{mana} MANA를 {address_link}으로 이전했습니다."
+      "소포 {parcel_link}을 구입하기 위해 모기지에 대해 {amount}의 부분 지불을했습니다",
+    "publish": "{parcel_link}을(를) 게시했습니다",
+    "transfer": "당신은 {asset_type} {asset_link}을 {owner_link}로 옮겼습니다",
+    "transfer_mana": "{mana} MANA를 {address_link}으로 이전했습니다"
+  },
+  "transaction_confirmations": {
+    "count": "{confirmations_count} 가지 확인",
+    "waiting": "확인을 기다리는 중"
   },
   "transaction_status": {
     "activity_page": "활동 페이지",
@@ -410,6 +421,23 @@
       "failed": "거래가 실패했습니다. 새 거래를 보낼 수 있습니다.",
       "pending": "거래가 확인되기를 기다리고 있습니다."
     }
+  },
+  "transaction_tooltips": {
+    "dropped": "이 트랜잭션은 네트워크에 의해 삭제되었습니다. ",
+    "loading": "거래 상태를 가져 오는 중입니다. ",
+    "queued":
+      "이전 보류중인 거래가 있기 때문에이 거래를 처리 할 수 ​​없습니다.",
+    "replaced":
+      "이 트랜잭션과 동일한 논스를 가진 다른 트랜잭션이 대신 채굴되었습니다."
+  },
+  "transaction_types": {
+    "confirmed": "수락 됨",
+    "dropped": "떨어 뜨린",
+    "loading": "로드 중",
+    "pending": "대기중인",
+    "queued": "대기 중",
+    "replaced": "대체 됨",
+    "reverted": "실패한"
   },
   "transfer_estate": {
     "about_to_transfer": "부동산 {name}을 양도하려합니다.",

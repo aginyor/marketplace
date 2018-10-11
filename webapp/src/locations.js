@@ -47,7 +47,9 @@ export const locations = {
 
   transferEstate: (id = params.id) => `/estates/${id}/transfer`,
   deleteEstate: (id = params.id) => `/estates/${id}/delete-estate`,
-
+  sellEstate: (id = params.id) => `/estates/${id}/sell`,
+  buyEstate: (id = params.id) => `/estates/${id}/buy`,
+  cancelSaleEstate: (id = params.id) => `/estates/${id}/cancel-sale`,
   // Generic assets
 
   assetDetail: function(asset) {
@@ -63,8 +65,7 @@ export const locations = {
   payMortgageParcel: (x = params.x, y = params.y) => `/mortgages/${x}/${y}/pay`,
 
   // General routes
-
-  marketplace: () => '/marketplace',
+  marketplace: () => `/marketplace`,
 
   buyMana: () => '/buy-mana',
   transferMana: () => '/transfer-mana',
@@ -94,4 +95,9 @@ export const NAVBAR_PAGES = Object.freeze({
   profile: 'My Land',
   settings: 'Settings',
   signIn: 'Sign In'
+})
+
+export const MARKETPLACE_PAGE_TABS = Object.freeze({
+  parcels: 'parcels',
+  estates: 'estates'
 })

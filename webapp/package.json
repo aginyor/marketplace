@@ -11,7 +11,7 @@
     "test": "CI=true node scripts/test.js --env=jsdom",
     "analyze": "source-map-explorer build/static/js/main.*",
     "build": "NODE_ENV=production REACT_APP_VERSION=$(git rev-parse --short HEAD) node scripts/build.js",
-    "postbuild": "export bundle_path=`ls ./build/static/js/*.js` && uglifyjs $bundle_path --compress --mangle reserved=['toParcelObject','normalizeParcel','connectParcel','getParcelPublications','buildCoordinate']  --output $bundle_path",
+    "postbuild": "export bundle_path=`ls ./build/static/js/*.js` && uglifyjs $bundle_path --compress --mangle reserved=['toParcelObject','toEstateObject','normalizeEstate','normalizeParcel','connectParcel','getAssetPublications','buildCoordinate']  --output $bundle_path",
     "remotebuild": "REACT_APP_VERSION=$(git rev-parse --short HEAD) NODE_PATH=/tmp/auction/webapp/node_modules node scripts/build.js"
   },
   "dependencies": {
@@ -29,8 +29,9 @@
     "css-loader": "0.28.7",
     "date-fns": "^1.29.0",
     "decentraland-commons": "^4.0.1",
-    "decentraland-dapps": "^3.2.0",
-    "decentraland-eth": "^4.3.0",
+    "decentraland-dapps": "^3.5.1",
+    "decentraland-eth": "^7.2.1",
+    "decentraland-ui": "^1.10.0",
     "dotenv": "4.0.0",
     "dotenv-expand": "4.2.0",
     "eslint": "4.10.0",
@@ -61,6 +62,7 @@
     "query-string": "^5.1.0",
     "raf": "3.4.0",
     "react": "16.2.0",
+    "react-circular-progressbar": "^1.0.0",
     "react-dev-utils": "^5.0.1",
     "react-dom": "16.2.0",
     "react-redux": "^5.0.6",

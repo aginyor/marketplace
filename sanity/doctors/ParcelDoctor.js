@@ -2,7 +2,7 @@ import { Log, env } from 'decentraland-commons'
 import { Doctor } from './Doctor'
 import { Diagnosis } from './Diagnosis'
 import { asyncBatch } from '../../src/lib'
-import { Parcel, ParcelService } from '../../src/Parcel'
+import { Parcel, ParcelService } from '../../src/Asset'
 import { BlockchainEvent } from '../../src/BlockchainEvent'
 import { parseCLICoords } from '../../scripts/utils'
 
@@ -48,6 +48,15 @@ export class ParcelDoctor extends Doctor {
             log.error(error)
             faultyParcels.push({ ...parcel, error })
           }
+
+          const currentUpdateOperator = updatedParcels[index].update_operator
+
+          if (this.isUpdateOperatorMismatch(currentUpdateOperator, parcel)) {
+            const { id, update_operator } = parcel
+            const error = `Mismatch: operator of '${id}' is '${update_operator}' on the DB and '${currentUpdateOperator}' in blockchain`
+            log.error(error)
+            faultyParcels.push({ ...parcel, error })
+          }
         }
       },
       batchSize: env.get('BATCH_SIZE'),
@@ -59,6 +68,13 @@ export class ParcelDoctor extends Doctor {
 
   isOwnerMissmatch(currentOwner, parcel) {
     return !!currentOwner && parcel.owner !== currentOwner
+  }
+
+  isUpdateOperatorMismatch(currentUpdateOperator, parcel) {
+    return (
+      !!currentUpdateOperator &&
+      parcel.update_operator !== currentUpdateOperator
+    )
   }
 }
 

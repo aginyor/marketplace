@@ -22,8 +22,17 @@ import {
 import { loadingReducer } from '@dapps/modules/loading/reducer'
 import { FETCH_ADDRESS_ESTATES_SUCCESS } from 'modules/address/actions'
 import { FETCH_MAP_SUCCESS } from 'modules/map/actions'
-import { FETCH_TRANSACTION_SUCCESS } from 'modules/transaction/actions'
+import { FETCH_TRANSACTION_SUCCESS } from '@dapps/modules/transaction/actions'
 import { getEstateIdFromTxReceipt } from './utils'
+import { normalizeEstate, isEstate } from 'shared/estate'
+import {
+  BUY_SUCCESS,
+  CANCEL_SALE_SUCCESS,
+  PUBLISH_SUCCESS,
+  FETCH_PUBLICATIONS_SUCCESS,
+  FETCH_ASSET_PUBLICATIONS_SUCCESS
+} from 'modules/publication/actions'
+import { ASSET_TYPES } from 'shared/asset'
 
 const INITIAL_STATE = {
   data: {},
@@ -58,8 +67,23 @@ export function estatesReducer(state = INITIAL_STATE, action) {
         data: {
           ...state.data,
           [estate.id]: {
-            ...estate
+            ...normalizeEstate(estate)
           }
+        }
+      }
+    }
+    case FETCH_PUBLICATIONS_SUCCESS: {
+      const { assets } = action
+      const estates = assets.filter(asset => isEstate(asset))
+      return {
+        ...state,
+        loading: loadingReducer(state.loading, action),
+        error: null,
+        data: {
+          ...state.data,
+          ...estates.reduce((acc, estate) => {
+            return { ...acc, [estate.id]: normalizeEstate(estate) }
+          }, state.data)
         }
       }
     }
@@ -75,15 +99,36 @@ export function estatesReducer(state = INITIAL_STATE, action) {
         error: action.error
       }
     }
+    case FETCH_ASSET_PUBLICATIONS_SUCCESS: {
+      const { id, assetType, publications } = action
+
+      if (assetType === ASSET_TYPES.estate) {
+        const estate = state.data[id]
+        if (estate) {
+          return {
+            ...state,
+            loading: loadingReducer(state.loading, action),
+            data: {
+              ...state.data,
+              [id]: {
+                ...estate,
+                publication_tx_hash_history: publications.map(
+                  publication => publication.tx_hash
+                )
+              }
+            }
+          }
+        }
+      }
+      return state
+    }
     case FETCH_MAP_SUCCESS: {
       return {
         ...state,
-        data: action.assets.estates.reduce(
-          (acc, estate) => {
-            return { ...acc, [estate.id]: estate }
-          },
-          { ...state.data }
-        )
+        data: {
+          ...state.data,
+          ...action.assets.estates
+        }
       }
     }
     case FETCH_ADDRESS_ESTATES_SUCCESS: {
@@ -96,7 +141,7 @@ export function estatesReducer(state = INITIAL_STATE, action) {
       }
     }
     case FETCH_TRANSACTION_SUCCESS: {
-      const transaction = action.transaction
+      const { transaction } = action.payload
 
       switch (transaction.actionType) {
         case EDIT_ESTATE_METADATA_SUCCESS: {
@@ -170,6 +215,73 @@ export function estatesReducer(state = INITIAL_STATE, action) {
               }
             }
           }
+        }
+        case BUY_SUCCESS: {
+          const owner = transaction.from
+          const tx_hash = transaction.payload.tx_hash
+          if (transaction.payload.type === ASSET_TYPES.estate) {
+            // unset publication_tx_hash and update owner
+            return {
+              ...state,
+              data: Object.values(state.data).reduce((newEstates, estate) => {
+                if (estate.publication_tx_hash === tx_hash) {
+                  newEstates[estate.id] = {
+                    ...estate,
+                    publication_tx_hash: null,
+                    owner
+                  }
+                } else {
+                  newEstates[estate.id] = { ...estate }
+                }
+                return newEstates
+              }, {})
+            }
+          }
+          return state
+        }
+        case CANCEL_SALE_SUCCESS: {
+          const tx_hash = transaction.payload.tx_hash
+          if (transaction.payload.type === ASSET_TYPES.estate) {
+            // unset publication_tx_hash
+            return {
+              ...state,
+              data: Object.values(state.data).reduce((newEstates, estate) => {
+                if (estate.publication_tx_hash === tx_hash) {
+                  newEstates[estate.id] = {
+                    ...estate,
+                    publication_tx_hash: null
+                  }
+                } else {
+                  newEstates[estate.id] = estate
+                }
+                return newEstates
+              }, {})
+            }
+          }
+          return state
+        }
+        case PUBLISH_SUCCESS: {
+          // set publication_tx_hash
+          const { type, id, tx_hash } = transaction.payload
+
+          if (type === ASSET_TYPES.estate && id in state.data) {
+            const estate = state.data[id]
+            return {
+              ...state,
+              data: {
+                ...state.data,
+                [id]: {
+                  ...estate,
+                  publication_tx_hash: tx_hash,
+                  publication_tx_hash_history: [
+                    tx_hash,
+                    ...(estate.publication_tx_hash_history || [])
+                  ]
+                }
+              }
+            }
+          }
+          return state
         }
         default:
           return state

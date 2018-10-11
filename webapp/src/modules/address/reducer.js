@@ -14,7 +14,7 @@ import {
 } from './actions'
 import { loadingReducer } from '@dapps/modules/loading/reducer'
 import { TRANSFER_PARCEL_SUCCESS } from 'modules/parcels/actions'
-import { FETCH_TRANSACTION_SUCCESS } from 'modules/transaction/actions'
+import { FETCH_TRANSACTION_SUCCESS } from '@dapps/modules/transaction/actions'
 import { BUY_SUCCESS } from 'modules/publication/actions'
 import {
   EDIT_ESTATE_PARCELS_SUCCESS,
@@ -24,8 +24,10 @@ import {
   REMOVE_PARCELS
 } from 'modules/estates/actions'
 import { getEstateIdFromTxReceipt } from 'modules/estates/utils'
-import { buildCoordinate } from 'shared/parcel'
+import { buildCoordinate, isParcel } from 'shared/parcel'
+import { isEstate } from 'shared/estate'
 import { toAddressParcelIds, toAddressPublicationIds } from './utils'
+import { ASSET_TYPES } from 'shared/asset'
 
 const EMPTY_ADDRESS = {
   contributions: [],
@@ -89,11 +91,16 @@ export function addressReducer(state = INITIAL_STATE, action) {
     }
     case FETCH_ADDRESS_PUBLICATIONS_SUCCESS: {
       const addressData = state.data[action.address] || {}
-      const { parcels, publications } = action
+      const { assets, publications } = action
 
       const parcel_ids = new Set([
         ...(addressData.parcel_ids || []),
-        ...toAddressParcelIds(parcels)
+        ...toAddressParcelIds(assets.filter(asset => isParcel(asset)))
+      ])
+
+      const estate_ids = new Set([
+        ...(addressData.estate_ids || []),
+        ...assets.filter(asset => isEstate(asset)).map(estate => estate.id)
       ])
 
       return {
@@ -104,7 +111,8 @@ export function addressReducer(state = INITIAL_STATE, action) {
           [action.address]: {
             ...addressData,
             publication_ids: toAddressPublicationIds(publications),
-            parcel_ids: Array.from(parcel_ids)
+            parcel_ids: Array.from(parcel_ids),
+            estate_ids: Array.from(estate_ids)
           }
         }
       }
@@ -119,7 +127,7 @@ export function addressReducer(state = INITIAL_STATE, action) {
         error: action.error
       }
     case FETCH_TRANSACTION_SUCCESS: {
-      const transaction = action.transaction
+      const transaction = action.payload.transaction
 
       switch (transaction.actionType) {
         case TRANSFER_PARCEL_SUCCESS: {
@@ -145,20 +153,39 @@ export function addressReducer(state = INITIAL_STATE, action) {
           }
         }
         case BUY_SUCCESS: {
-          const { x, y } = transaction.payload
-          const parcelId = buildCoordinate(x, y)
-          return {
-            ...state,
-            data: {
-              ...state.data,
-              [transaction.from]: {
-                ...state.data[transaction.from],
-                parcel_ids: [
-                  ...state.data[transaction.from].parcel_ids,
-                  parcelId
-                ]
+          switch (transaction.payload.type) {
+            case ASSET_TYPES.parcel: {
+              const { x, y } = transaction.payload
+              const parcelId = buildCoordinate(x, y)
+              return {
+                ...state,
+                data: {
+                  ...state.data,
+                  [transaction.from]: {
+                    ...state.data[transaction.from],
+                    parcel_ids: [
+                      ...state.data[transaction.from].parcel_ids,
+                      parcelId
+                    ]
+                  }
+                }
               }
             }
+            case ASSET_TYPES.estate: {
+              const { id } = transaction.payload
+              return {
+                ...state,
+                data: {
+                  ...state.data,
+                  [transaction.from]: {
+                    ...state.data[transaction.from],
+                    estate_ids: [...state.data[transaction.from].estate_ids, id]
+                  }
+                }
+              }
+            }
+            default:
+              return state
           }
         }
         case EDIT_ESTATE_PARCELS_SUCCESS: {

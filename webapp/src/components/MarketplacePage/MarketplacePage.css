@@ -31,10 +31,25 @@
   opacity: 0.8 !important;
 }
 
-.MarketplacePage .ui.label.active {
+.MarketplacePage .ui.menu .item > .label {
+  background-color: var(--dark-gray);
+  color: white;
+}
+
+.MarketplacePage .ui.menu .item > .label.active {
   background-color: var(--primary);
 }
 
 .MarketplacePage .menu.right > .item {
   padding-bottom: 0px !important;
+}
+
+@media (max-width: 768px) {
+  .MarketplacePage .ui.secondary.pointing.menu .active.item {
+    border: none;
+  }
+
+  .MarketplacePage .ui.selection.dropdown {
+    width: 100%;
+  }
 }

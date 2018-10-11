@@ -1,6 +1,4 @@
-import { txUtils } from 'decentraland-eth'
-
-import { Publication, PublicationQueries } from '../Publication'
+import { PublicationQueries } from '../Publication'
 import { db, SQL, raw } from '../database'
 
 export class Asset {
@@ -37,7 +35,9 @@ export class Asset {
     if (ids.length === 0) return []
 
     return db.query(
-      SQL`SELECT *
+      SQL`SELECT *, (
+        ${PublicationQueries.findLastAssetPublicationJsonSql(this.tableName)}
+      ) as publication
         FROM ${raw(this.tableName)}
         WHERE id = ANY(${ids})`
     )
@@ -47,7 +47,9 @@ export class Asset {
     if (tokenIds.length === 0) return []
 
     return db.query(
-      SQL`SELECT *
+      SQL`SELECT *, (
+        ${PublicationQueries.findLastAssetPublicationJsonSql(this.tableName)}
+      ) as publication
         FROM ${raw(this.tableName)}
         WHERE token_id = ANY(${tokenIds})`
     )
@@ -75,40 +77,19 @@ export class Asset {
     )
   }
 
-  async filter(filters) {
-    const { status, asset_type, sort, pagination } = filters.sanitize()
-    const tx_status = txUtils.TRANSACTION_STATUS.confirmed
+  async filter(queryParams) {
+    const { sort, pagination } = queryParams.sanitize()
+
     const [assets, total] = await Promise.all([
       db.query(
-        SQL`SELECT model.*, row_to_json(pub.*) as publication
-          FROM ${raw(Publication.tableName)} as pub
-          JOIN ${raw(this.tableName)} as model ON model.id = pub.asset_id
-          WHERE tx_status = ${tx_status}
-            AND asset_type = ${asset_type}
-            AND ${PublicationQueries.whereIsActive()}
-            AND ${PublicationQueries.hasStatus(status)}
-          ORDER BY pub.${raw(sort.by)} ${raw(sort.order)}
+        SQL`SELECT model.*
+          FROM ${raw(this.tableName)} as model
+          ORDER BY model.${raw(sort.by)} ${raw(sort.order)}
           LIMIT ${raw(pagination.limit)} OFFSET ${raw(pagination.offset)}`
       ),
-      this.countAssetPublications(filters, asset_type)
+      this.Model.count()
     ])
 
     return { assets, total }
-  }
-
-  async countAssetPublications(filters) {
-    const { status, asset_type } = filters.sanitize()
-    const tx_status = txUtils.TRANSACTION_STATUS.confirmed
-
-    const counts = await db.query(
-      SQL`SELECT COUNT(*)
-        FROM ${raw(Publication.tableName)}
-        WHERE status = ${status}
-          AND tx_status = ${tx_status}
-          AND asset_type = ${asset_type}
-          AND ${PublicationQueries.whereIsActive()}`
-    )
-
-    return parseInt(counts[0].count, 10)
   }
 }

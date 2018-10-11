@@ -13,6 +13,64 @@
   "address": {
     "its_you": "您的"
   },
+  "asset_buy": {
+    "about_to_buy": "您即将购买 {parcel_name}",
+    "allowed_balance": "你的津贴是{allowance}",
+    "buy_asset": "购买土地",
+    "buy_mana": "{click_here}购买一些 MANA。",
+    "didnt_allow": "您尚未授权使用MANA",
+    "didnt_allow_new_marketplace": "您尚未授权新版本的Marketplace使用MANA",
+    "needs_at_least": "为了购买这块土地，您至少需要 {mana} MANA。",
+    "please_allow":
+      "请转到{settings_link}并允许LegacyMarketplace合同代表您运行MANA",
+    "please_allow_new_marketplace":
+      "请转到{settings_link}并允许Marketplace合同代表您运行MANA",
+    "total_balance": "您的余额是 {balance}"
+  },
+  "asset_cancel": {
+    "about_to_cancel": "您即将取消出售 {parcel}。",
+    "cancel_sale": "取消销售",
+    "not_for_sale": "地块 {parcel} 不出售。"
+  },
+  "asset_detail": {
+    "actions": {
+      "cancel": "取消销售",
+      "permissions": "权限",
+      "sell": "卖",
+      "transfer": "转让"
+    },
+    "history": {
+      "auction": "拍卖",
+      "event": "事件",
+      "from": "从",
+      "price": "价钱",
+      "sold": "出售",
+      "title": "交易历史",
+      "to": "至",
+      "when": "什么时候"
+    },
+    "publication": {
+      "buy": "购买",
+      "price": "价钱"
+    }
+  },
+  "asset_publish": {
+    "already_sold": "这个{asset_name}已经在{value}上发售",
+    "errors": {
+      "maximum_expiration": "最大到期日期为{date}",
+      "maximum_land_price": "最高{asset_name}价格为{value} MANA",
+      "minimum_expiration": "最短到期日期为{date}",
+      "minimum_land_price": "最低{asset_name}价格为{value} MANA"
+    },
+    "expiration": "呼气",
+    "expiration_placeholder": "本出版物的截止日期",
+    "list_asset": "列出{asset_name}待售",
+    "please_authorize":
+      "您需要转到{settings_link}并授权市场代表您运营{asset_name}，然后才能在销售中列出它。",
+    "price": "价钱",
+    "price_placeholder": "这个{asset_name}的价格在MANA",
+    "set_asset_price": "设置{asset_name}的价格和到期日期。"
+  },
   "atlas": {
     "loading": "载入中",
     "no_owner": "无主地",
@@ -21,6 +79,14 @@
     "road": "路",
     "your_estate": "您的连块土地",
     "your_parcel": "您的地块"
+  },
+  "authorization": {
+    "allow": "授权{contract_link}代表您运行{symbol}",
+    "allowed": "您授权{contract_link}代表您运行{symbol}",
+    "approve": "授权{contract_link}代表您运行{symbol}",
+    "approved": "您授权{contract_link}代表您运行{symbol}",
+    "disallowed": "您未经授权{contract_link}代表您操作{symbol}",
+    "disapproved": "您未经授权{contract_link}代表您操作{symbol}"
   },
   "buy_mana": {
     "action": "购买",
@@ -44,7 +110,8 @@
     "taken": "有主地",
     "title": "图示",
     "unowned": "无主地",
-    "yours": "您的土地"
+    "yours": "您的土地",
+    "yours_on_sale": "你的特价"
   },
   "contribution": {
     "proposal": "提案"
@@ -77,7 +144,7 @@
   "estate_select": {
     "description": "选择彼此相邻的宗地",
     "detail": "连块土地细节",
-    "edit_selection": "在地图上选择宗地",
+    "edit_selection": "在地图上选择地块",
     "new_selection": "请在地图上选择新地块",
     "tx_to_be_send": "您将向 {action} 土块发送交易：{parcels}"
   },
@@ -89,18 +156,17 @@
     "terms": "服务条款"
   },
   "global": {
-    "acquired_at": "获得日期 {date}",
+    "acquired_ago": "获得日期 {date}",
     "activity": "活动",
     "add": "加",
     "address_placeholder": "0x...",
     "atlas": "地图",
-    "authorized": "已授权",
     "balance": "余额",
     "blog": "博客",
     "cancel": "取消",
     "change": "更改",
     "check_address": "请仔细检查地址",
-    "clear": "明确",
+    "clear": "清除记录",
     "click_here": "点击这里",
     "community_chat": "社区聊天",
     "confirm": "确认",
@@ -138,12 +204,12 @@
     "settings": "设置",
     "sign_in": "登录",
     "sign_in_notice": "请登录 {sign_in_link} 后访问此页面",
-    "submit": "提交",
+    "submit": "确定",
     "the_estate": "连块土地",
-    "the_parcel": "包裹",
+    "the_parcel": "地块",
     "time_left": "剩余时间",
     "transfer_irreversible": "请记住，转让是不可逆转的操作。",
-    "unauthorized": "未授权",
+    "unauthorized": "擅自",
     "undo": "撤消",
     "wallet_address": "钱包地址",
     "website": "网站"
@@ -182,6 +248,7 @@
     "duration_placeholder": "持续时间以天计",
     "errors": {
       "amount_minimum": "金额应该大于 {amount}",
+      "deposit_gt_balance": "所需押金大于您的余额",
       "duration_gte_payable": "持续时间应该大于或等于付款期限",
       "maximum_interest_rate": "费率应低于 {maximum}",
       "minimum_duration": "持续时间应该大于 {minimum} 天",
@@ -194,7 +261,7 @@
     "fetching_data": "获取抵押贷款数据",
     "interest_rate": "利率",
     "interest_rate_placeholder": "利率",
-    "oracle": "Oracle合同地址",
+    "oracle": "Oracle 合同地址",
     "outstanding_amount": "杰出的金额",
     "partial_payment": "部分付款",
     "partial_payment_desc": "您即将支付部分抵押贷款购买土地{parcel_name}",
@@ -211,56 +278,30 @@
     "request": "申请抵押",
     "request_land":
       "您将为 {parcel_name} 地块以 {parcel_price} 的价格申请抵押贷款",
-    "requested": "已申请"
+    "requested": "已申请",
+    "required_deposit": "所需押金：{deposit}"
+  },
+  "name": {
+    "estate": "Estate",
+    "parcel": "LAND"
   },
   "parcel": {
     "no_description": "没有说明",
     "no_name": "无名",
     "view": "查看"
   },
-  "parcel_buy": {
-    "about_to_buy": "您即将购买 {parcel_name}",
-    "approved_balance": "您能使用的余额是 {approved_balance}",
-    "buy_land": "购买土地",
-    "buy_mana": "{click_here}购买一些 MANA。",
-    "didnt_approve": "您没有批准使用 MANA",
-    "needs_at_least": "为了购买这块土地，您至少需要 {mana} MANA。",
-    "please_approve": "请前往{settings_link}，允许虚拟市场以您的名义使用 MANA",
-    "total_balance": "您的余额是 {balance}"
-  },
-  "parcel_cancel": {
-    "about_to_cancel": "您即将取消出售 {parcel}。",
-    "cancel_land": "取消土地出售",
-    "not_for_sale": "地块 {parcel} 不出售。"
-  },
   "parcel_detail": {
     "actions": {
-      "cancel": "取消出售",
-      "create_estate": "创建连块土地",
-      "permissions": "权限",
-      "sell": "出售",
-      "transfer": "转让"
+      "create_estate": "创建连块土地"
     },
     "description": "描述",
     "empty_description": "这个地块没有描述",
-    "history": {
-      "auction": "拍卖",
-      "event": "事件",
-      "from": "从",
-      "price": "价格",
-      "sold": "出售",
-      "title": "交易历史",
-      "to": "至",
-      "when": "日期"
-    },
     "owner": {
       "no_owner": "无主",
       "part_of": "{name} 的一部分"
     },
     "publication": {
-      "buy": "购买",
-      "mortgage": "请求抵押",
-      "price": "价格"
+      "mortgage": "请求抵押"
     },
     "tags": {
       "title": "着重说明"
@@ -281,23 +322,6 @@
     "give_permission": "授权更新 {parcel_name} 上的内容。",
     "manage_land": "地块管理"
   },
-  "parcel_publish": {
-    "already_sold": "这块虚拟土地已以 {value} 价格出售中",
-    "errors": {
-      "maximum_expiration": "截止日期是 {date}",
-      "maximum_land_price": "地块最高价是 {value} MANA",
-      "minimum_expiration": "最短有效期限为 {date}",
-      "minimum_land_price": "地块最低价是 {value} MANA"
-    },
-    "expiration": "到期时间",
-    "expiration_placeholder": "待售截止日期",
-    "list_land": "地块上架出售",
-    "please_authorize":
-      "您需要在设置页面{settings_link}授权委托虚拟市场以您的名义操作土地交易，然后才能将其上架出售。",
-    "price": "价格",
-    "price_placeholder": "此地块的 MANA 价格",
-    "set_land_price": "为 {parcel_name} 设置价格和截止日期"
-  },
   "parcel_tags": {
     "adjacent": "路边",
     "district": "小区",
@@ -314,25 +338,15 @@
     "view": "查看"
   },
   "settings": {
-    "approve_mana": "授权{marketplace_contract_link}以您的名义操作 MANA",
-    "approve_mana_check": "检查虚拟市场合约使用 MANA 的授权",
-    "approve_mortgage_mana": "授权{mortgage_contract_link}代您操作 MANA",
-    "approve_mortgage_rcn": "授权{mortgage_contract_link}代您操作 RCN",
     "authorization": "授权",
-    "authorize": "授权{marketplace_contract_link}代您操作土地",
-    "authorize_land_check": "勾选并授权虚拟市场合约使用土地",
-    "disapprove_mana_check": "取消选中不授权虚拟市场合约使用 MANA",
-    "mana_approved": "您已授权{marketplace_contract_link}以您的名义操作 MANA",
-    "marketplace_contract": "虚拟市场合约",
-    "mortgage_helper_contract": "抵押创建者合约",
-    "mortgage_manager_contract": "抵押管理合约",
-    "pending_tx": "您有待处理的交易",
-    "unauthorize_land_check": "取消勾选取消授权市场合约使用虚拟土地",
-    "you_approved_mortgage_mana":
-      "您已授权{mortgage_contract_link}代表您操作 MANA",
-    "you_approved_mortgage_rcn":
-      "您已授权{mortgage_contract_link}代表您运营 RCN",
-    "you_authorized": "您已授权{marketplace_contract_link}以您的名义操作土地"
+    "authorization_error": "我们无法加载您的授权，请重试",
+    "authorization_error_contact": "如果错误仍然存​​在，请不要犹豫与我们联系",
+    "for_buying": "购买",
+    "for_buying_LegacyMarketplace": "使用MANA（遗留）的资产",
+    "for_buying_Marketplace": "使用MANA的资产",
+    "for_selling": "出售",
+    "legacy_authorization": "遗产授权",
+    "pending_tx": "您有待处理的交易"
   },
   "sign_in": {
     "account_unlocked": "确保您的帐户已解锁",
@@ -345,16 +359,13 @@
     }
   },
   "transaction": {
-    "approved": "您授权 {marketplace_contract_link} 以您的名义操作 MANA",
-    "authorize": "您{action} {marketplace_contract_link} 以您的名义操作 LAND",
     "buy": "您购买了 {parcel_link} 地块",
     "buy_mana": "您已经买了 {mana} MANA",
-    "cancel": "您取消了 {parcel_link} 上的 {publication_link}",
+    "cancel": "你在{parcel_link}取消了这笔交易",
     "cancel_mortgage": "您取消了购买地块 {parcel_link} 的抵押",
     "claim_mortgage_resolution": "您认领了 {parcel_link}",
     "create_estate": "您创建了连块土地 {name}",
     "create_mortgage": "您要求抵押以购买地块 {parcel_link}",
-    "disapproved": "您未授权{marketplace_contract_link}以您的名义操作 MANA",
     "dissolve_estate": "你解散了连块土地 {name}",
     "edit": "您编辑了{parcel_link}地块的名称\"{name}\"和描述\"{description}\"",
     "edit_estate_metadata":
@@ -363,12 +374,16 @@
     "edit_estate_parcels_removed": "您从连块土地 {name} 中移除了 {amount} 地块",
     "manage": "您授权{address_link}更新{parcel_link}上的内容",
     "manage_revoked": "您撤销了允许{address_link}更新{parcel_link}内容的授权",
-    "mortgage_mana": "您{action} {mortgage_contract_link}代表您操作 MANA。",
-    "mortgage_rcn": "您{action} {mortgage_contract_link}代表您运营 RCN。",
+    "mortgage_mana": "您{action} {mortgage_contract_link}代表您操作 MANA",
+    "mortgage_rcn": "您{action} {mortgage_contract_link}代表您运营 RCN",
     "pay_mortgage": "您为抵押购买{parcel_link}包的部分支付{amount}",
     "publish": "您发布了{parcel_link}地块",
     "transfer": "您将{asset_type} {asset_link}转移到{owner_link}",
     "transfer_mana": "{mana} 个 MANA 已转帐至{address_link}"
+  },
+  "transaction_confirmations": {
+    "count": "{confirmations_count}个确认",
+    "waiting": "等待确认"
   },
   "transaction_status": {
     "activity_page": "活动页面",
@@ -385,13 +400,28 @@
       "pending": "交易正在等待确认。"
     }
   },
+  "transaction_tooltips": {
+    "dropped": "此事务已被网络删除。",
+    "loading": "获取交易状态。",
+    "queued": "无法处理此事务，因为存在先前挂起的事务",
+    "replaced": "另一个具有与此相同的nonce的事务被挖掘"
+  },
+  "transaction_types": {
+    "confirmed": "公认",
+    "dropped": "下降",
+    "loading": "载入中",
+    "pending": "有待",
+    "queued": "排队",
+    "replaced": "更换",
+    "reverted": "失败"
+  },
   "transfer_estate": {
     "about_to_transfer": "您即将转让连块土地 {name}。",
     "transfer_estate": "转让连块土地"
   },
   "transfer_mana": {
     "action": "转帐",
-    "amount": "量",
+    "amount": "数量",
     "current_balance": "您目前的余额是 {balance}",
     "irreversible": "注意，MANA 转帐不能回退或撤消。",
     "is_mana_contract_address": "这是MANA合同地址",

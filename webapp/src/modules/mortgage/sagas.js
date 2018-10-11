@@ -25,7 +25,7 @@ import {
   fetchActiveParcelMortgagesRequest
 } from './actions'
 import { getAddress } from 'modules/wallet/selectors'
-import { getParcelPublications, normalizeParcel } from 'shared/parcel'
+import { normalizeParcel } from 'shared/parcel'
 
 import {
   MORTGAGE_STATUS,
@@ -33,13 +33,10 @@ import {
   getLoanMetadata,
   daysToSeconds
 } from 'shared/mortgage'
-import {
-  getKyberOracleAddress,
-  getRCNEngineAddress,
-  getMortgageManagerAddress
-} from 'modules/wallet/utils'
+import { getKyberOracleAddress, getContractAddress } from 'modules/wallet/utils'
 import { locations } from 'locations'
 import { FETCH_PARCEL_SUCCESS } from 'modules/parcels/actions'
+import { getAssetPublications } from 'shared/asset'
 
 export function* mortgageSaga() {
   if (isFeatureEnabled('MORTGAGES')) {
@@ -80,7 +77,7 @@ function* handleFetchMortgageRequest(action) {
       fetchMortgagedParcelsSuccess(
         parcels.map(normalizeParcel),
         mortgages,
-        getParcelPublications(parcels)
+        getAssetPublications(parcels)
       )
     )
   } catch (error) {
@@ -110,7 +107,7 @@ function* handleCreateMortgageRequest(action) {
       landRegistryContract.encodeTokenId(parcel.x, parcel.y)
     )
     const borrower = yield select(getAddress)
-    const loanMetadata = getLoanMetadata(getMortgageManagerAddress())
+    const loanMetadata = getLoanMetadata(getContractAddress('MortgageManager'))
 
     let loanParams = [
       eth.utils.toWei(amount), // Amount requested
@@ -195,8 +192,7 @@ function* handlePayMortgageRequest(action) {
   try {
     const { loanId, amount, assetId } = action
     const mortgageHelperContract = eth.getContract('MortgageHelper')
-
-    const rcnEngineAddress = getRCNEngineAddress()
+    const rcnEngineAddress = getContractAddress('RCNEngine')
 
     const payMortgageReceipt = yield call(() =>
       mortgageHelperContract.pay(
@@ -217,9 +213,8 @@ function* handlePayMortgageRequest(action) {
 function* handleClaimMortgageResolutionRequest(action) {
   try {
     const { loanId, assetId } = action
-    const rcnEngineAddress = getRCNEngineAddress()
-
     const mortgageManagerContract = eth.getContract('MortgageManager')
+    const rcnEngineAddress = getContractAddress('RCNEngine')
 
     const claimMortgageResolutionReceipt = yield call(() =>
       mortgageManagerContract.claim(rcnEngineAddress, loanId, [])

@@ -1,7 +1,6 @@
 import { buildTransactionAction } from 'modules/transaction/utils'
 
 // Fetch Publications
-
 export const FETCH_PUBLICATIONS_REQUEST = '[Request] Fetch Publications'
 export const FETCH_PUBLICATIONS_SUCCESS = '[Success] Fetch Publications'
 export const FETCH_PUBLICATIONS_FAILURE = '[Failure] Fetch Publications'
@@ -11,7 +10,8 @@ export function fetchPublicationsRequest({
   offset,
   sortBy,
   sortOrder,
-  status
+  status,
+  assetType
 } = {}) {
   return {
     type: FETCH_PUBLICATIONS_REQUEST,
@@ -19,16 +19,25 @@ export function fetchPublicationsRequest({
     offset,
     sortBy,
     sortOrder,
-    status
+    status,
+    assetType
   }
 }
 
-export function fetchPublicationsSuccess(parcels, publications, total) {
+export function fetchPublicationsSuccess({
+  assets,
+  total,
+  publications,
+  assetType,
+  isGrid
+}) {
   return {
     type: FETCH_PUBLICATIONS_SUCCESS,
-    parcels,
+    assets,
+    assetType,
     publications,
-    total
+    total,
+    isGrid
   }
 }
 
@@ -39,44 +48,44 @@ export function fetchPublicationsFailure(error) {
   }
 }
 
-// Fetch Parcel Publications
+// Fetch Asset Publications
 
-export const FETCH_PARCEL_PUBLICATIONS_REQUEST =
-  '[Request] Fetch Parcel Publications'
-export const FETCH_PARCEL_PUBLICATIONS_SUCCESS =
-  '[Success] Fetch Parcel Publications'
-export const FETCH_PARCEL_PUBLICATIONS_FAILURE =
-  '[Failure] Fetch Parcel Publications'
+export const FETCH_ASSET_PUBLICATIONS_REQUEST =
+  '[Request] Fetch Asset Publications'
+export const FETCH_ASSET_PUBLICATIONS_SUCCESS =
+  '[Success] Fetch Asset Publications'
+export const FETCH_ASSET_PUBLICATIONS_FAILURE =
+  '[Failure] Fetch Asset Publications'
 
-export function fetchParcelPublicationsRequest(x, y) {
+export function fetchAssetPublicationsRequest(id, assetType) {
   return {
-    type: FETCH_PARCEL_PUBLICATIONS_REQUEST,
-    x,
-    y
+    type: FETCH_ASSET_PUBLICATIONS_REQUEST,
+    id,
+    assetType
   }
 }
 
-export function fetchParcelPublicationsSuccess(publications, x, y) {
+export function fetchAssetPublicationsSuccess(publications, id, assetType) {
   return {
-    type: FETCH_PARCEL_PUBLICATIONS_SUCCESS,
+    type: FETCH_ASSET_PUBLICATIONS_SUCCESS,
     publications,
-    x,
-    y
+    id,
+    assetType
   }
 }
 
-export function fetchParcelPublicationsFailure(error) {
+export function fetchAssetPublicationsFailure(error) {
   return {
-    type: FETCH_PARCEL_PUBLICATIONS_FAILURE,
+    type: FETCH_ASSET_PUBLICATIONS_FAILURE,
     error
   }
 }
 
 // Publish LAND
 
-export const PUBLISH_REQUEST = '[Request] Publish LAND'
-export const PUBLISH_SUCCESS = '[Success] Publish LAND'
-export const PUBLISH_FAILURE = '[Failure] Publish LAND'
+export const PUBLISH_REQUEST = '[Request] Publish Asset'
+export const PUBLISH_SUCCESS = '[Success] Publish Asset'
+export const PUBLISH_FAILURE = '[Failure] Publish Asset'
 
 export function publishRequest(publication = {}) {
   return {
@@ -105,9 +114,9 @@ export function publishFailure(error) {
 
 // Buy LAND
 
-export const BUY_REQUEST = '[Request] Buy LAND'
-export const BUY_SUCCESS = '[Success] Buy LAND'
-export const BUY_FAILURE = '[Failure] Buy LAND'
+export const BUY_REQUEST = '[Request] Buy Asset'
+export const BUY_SUCCESS = '[Success] Buy Asset'
+export const BUY_FAILURE = '[Failure] Buy Asset'
 
 export function buyRequest(publication = {}) {
   return {
@@ -138,9 +147,9 @@ export function buyFailure(error) {
 
 // Cancel LAND Sale
 
-export const CANCEL_SALE_REQUEST = '[Request] Cancel LAND Sale'
-export const CANCEL_SALE_SUCCESS = '[Success] Cancel LAND Sale'
-export const CANCEL_SALE_FAILURE = '[Failure] Cancel LAND Sale'
+export const CANCEL_SALE_REQUEST = '[Request] Cancel Asset Sale'
+export const CANCEL_SALE_SUCCESS = '[Success] Cancel Asset Sale'
+export const CANCEL_SALE_FAILURE = '[Failure] Cancel Asset Sale'
 
 export function cancelSaleRequest(publication = {}) {
   return {

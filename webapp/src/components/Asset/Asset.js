@@ -9,6 +9,7 @@ export default class Asset extends React.PureComponent {
     wallet: walletType.isRequired,
     value: PropTypes.object,
     isConnecting: PropTypes.bool,
+    isFetchingAsset: PropTypes.bool,
     isLoading: PropTypes.bool,
     ownerOnly: PropTypes.bool,
     ownerNotAllowed: PropTypes.bool,
@@ -19,6 +20,7 @@ export default class Asset extends React.PureComponent {
 
   static defaultProps = {
     isConnecting: false,
+    isFetchingAsset: false,
     isLoading: false,
     ownerOnly: false,
     ownerNotAllowed: false,
@@ -30,6 +32,7 @@ export default class Asset extends React.PureComponent {
   constructor(props) {
     super(props)
     this.isNavigatingAway = false
+    this.shouldRefresh = false
   }
 
   componentWillMount() {
@@ -41,10 +44,18 @@ export default class Asset extends React.PureComponent {
     onLoaded()
   }
 
+  componentDidUpdate() {
+    if (this.shouldRefresh) {
+      this.props.onLoaded()
+      this.shouldRefresh = false
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     const {
       value,
       isConnecting,
+      isFetchingAsset,
       ownerOnly,
       wallet,
       ownerNotAllowed,
@@ -53,9 +64,10 @@ export default class Asset extends React.PureComponent {
 
     const ownerIsNotAllowed =
       ownerNotAllowed && value && isOwner(wallet, value.id)
-    const assetShouldBeOnSale = withPublications && value && !value.publication
+    const assetShouldBeOnSale =
+      withPublications && value && !value['publication_tx_hash']
 
-    if (isConnecting) {
+    if (isConnecting || isFetchingAsset) {
       return
     }
 
@@ -66,12 +78,18 @@ export default class Asset extends React.PureComponent {
     if (ownerIsNotAllowed || assetShouldBeOnSale || !value) {
       this.redirect()
     }
+
+    if (this.props.value && value && this.props.value.id !== value.id) {
+      this.shouldRefresh = true
+    }
   }
 
   redirect() {
     const { onAccessDenied } = this.props
-    this.isNavigatingAway = true
-    onAccessDenied()
+    if (!this.isNavigatingAway) {
+      this.isNavigatingAway = true
+      return onAccessDenied()
+    }
   }
 
   checkOwnership(wallet, assetId) {

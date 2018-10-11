@@ -96,19 +96,12 @@ export function isSameValue(parcelA, parcelB, prop) {
   )
 }
 
-export function getParcelPublications(parcels) {
-  return parcels.reduce((pubs, parcel) => {
-    if (parcel.publication) pubs.push(parcel.publication)
-    return pubs
-  }, [])
+export function getParcelMatcher(parcel) {
+  return parcel2 => isEqualCoords(parcel, parcel2)
 }
 
 export function isEqualCoords(p1, p2) {
   return p1.x === p2.x && p1.y === p2.y
-}
-
-export function getCoordsMatcher(coords) {
-  return coords2 => isEqualCoords(coords, coords2)
 }
 
 /*
@@ -140,5 +133,17 @@ export function hasParcelsConnected({ x, y }, parcels) {
     (Bounds.inBounds(moveRight.x, moveRight.y) &&
       parcelRight &&
       !parcelRight.estate_id)
+  )
+}
+
+/**
+ * Get the parcels not included in allParcels
+ * @param newParcels
+ * @param allParcels
+ * @return array with parcels of newParcels not included in allParcels
+ */
+export function getParcelsNotIncluded(newParcels, allParcels) {
+  return newParcels.filter(
+    newParcel => !allParcels.some(getParcelMatcher(newParcel))
   )
 }

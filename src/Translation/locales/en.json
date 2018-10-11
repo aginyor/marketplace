@@ -14,6 +14,66 @@
   "address": {
     "its_you": "It's you"
   },
+  "asset_buy": {
+    "about_to_buy": "You are about to buy {name} {price}.",
+    "allowed_balance": "Your allowance is {allowance}",
+    "buy_asset": "Buy {asset_type}",
+    "buy_mana": "{click_here} to buy some MANA.",
+    "didnt_allow": "You haven't authorized MANA usage",
+    "didnt_allow_new_marketplace":
+      "You haven't authorized MANA usage for the new version of the Marketplace",
+    "needs_at_least":
+      "You need at least {mana} in order to buy this {asset_type}.",
+    "please_allow":
+      "Please go to {settings_link} and allow the LegacyMarketplace contract to operate MANA on your behalf",
+    "please_allow_new_marketplace":
+      "Please go to {settings_link} and allow the Marketplace contract to operate MANA on your behalf",
+    "total_balance": "Your balance is {balance}"
+  },
+  "asset_cancel": {
+    "about_to_cancel": "You are about to cancel the sale of {name}.",
+    "cancel_sale": "Cancel Sale",
+    "not_for_sale": "The {asset_name} {asset} is not for sale."
+  },
+  "asset_detail": {
+    "actions": {
+      "cancel": "Cancel sale",
+      "permissions": "Permissions",
+      "sell": "Sell",
+      "transfer": "Transfer"
+    },
+    "history": {
+      "auction": "Auction",
+      "event": "Event",
+      "from": "From",
+      "price": "Price",
+      "sold": "Sold",
+      "title": "Transaction History",
+      "to": "To",
+      "when": "When"
+    },
+    "publication": {
+      "buy": "Buy",
+      "price": "Price"
+    }
+  },
+  "asset_publish": {
+    "already_sold": "This {asset_name} is already on sale for {value}",
+    "errors": {
+      "maximum_expiration": "The maximum expiration date is {date}",
+      "maximum_land_price": "The maximum {asset_name} price is {value} MANA",
+      "minimum_expiration": "The minimum expiration date is {date}",
+      "minimum_land_price": "The minimum {asset_name} price is {value} MANA"
+    },
+    "expiration": "Expiration",
+    "expiration_placeholder": "Expiration date for this publication",
+    "list_asset": "List {asset_name} for sale",
+    "please_authorize":
+      "You need to go to {settings_link} and authorize the Marketplace to operate {asset_name} on your behalf before you can list it on sale.",
+    "price": "Price",
+    "price_placeholder": "Price in MANA for this {asset_name}",
+    "set_asset_price": "Set a price and an expiration date for {asset_name}."
+  },
   "atlas": {
     "loading": "Loading",
     "no_owner": "No Owner",
@@ -22,6 +82,19 @@
     "road": "Road",
     "your_estate": "Your estate",
     "your_parcel": "Your parcel"
+  },
+  "authorization": {
+    "allow": "Authorize the {contract_link} to operate {symbol} on your behalf",
+    "allowed":
+      "You authorized the {contract_link} to operate {symbol} on your behalf",
+    "approve":
+      "Authorize the {contract_link} to operate {symbol} on your behalf",
+    "approved":
+      "You authorized the {contract_link} to operate {symbol} on your behalf",
+    "disallowed":
+      "You unauthorized the {contract_link} to operate {symbol} on your behalf",
+    "disapproved":
+      "You unauthorized the {contract_link} to operate {symbol} on your behalf"
   },
   "buy_mana": {
     "action": "Buy More",
@@ -45,7 +118,8 @@
     "taken": "Taken",
     "title": "Color key",
     "unowned": "Unowned",
-    "yours": "Yours"
+    "yours": "Yours",
+    "yours_on_sale": "Yours on sale"
   },
   "contribution": {
     "proposal": "proposal"
@@ -91,12 +165,11 @@
     "terms": "Terms & Conditions"
   },
   "global": {
-    "acquired_at": "Acquired at {date}",
+    "acquired_ago": "Acquired {date}",
     "activity": "Activity",
     "add": "add",
     "address_placeholder": "0x...",
     "atlas": "Atlas",
-    "authorized": "Authorized",
     "balance": "Balance",
     "blog": "Blog",
     "cancel": "Cancel",
@@ -185,6 +258,7 @@
     "duration_placeholder": "Duration in days",
     "errors": {
       "amount_minimum": "Amount should be greater than {amount}",
+      "deposit_gt_balance": "Required deposit is greater than your balance",
       "duration_gte_payable":
         "Duration should be greater or equal than payable at days",
       "maximum_interest_rate": "The rate should be lower than {maximum}",
@@ -208,65 +282,38 @@
     "payable_placeholder": "Payable in days",
     "pending_tx": "The mortgage for",
     "please_authorize_MANA":
-      "Please go to {settings_link} and and authorize the Mortgage Helper contract to operate MANA on your behalf",
+      "Please go to {settings_link} and and authorize the MortgageHelper contract to operate MANA on your behalf",
     "please_authorize_RCN":
-      "Please go to {settings_link} and authorize the Mortgage Manager contract to operate RCN on your behalf",
+      "Please go to {settings_link} and authorize the MortgageManager contract to operate RCN on your behalf",
     "punitory_rate": "Punitory interest rate",
     "punitory_rate_placeholder": "Punitory rate",
     "request": "Requesting a Mortgage",
     "request_land":
       "You are about to request a mortgage for {parcel_name} valued in {parcel_price}",
-    "requested": "Requested"
+    "requested": "Requested",
+    "required_deposit": "Required deposit: {deposit}"
+  },
+  "name": {
+    "estate": "Estate",
+    "parcel": "LAND"
   },
   "parcel": {
     "no_description": "No description",
     "no_name": "No name",
     "view": "View"
   },
-  "parcel_buy": {
-    "about_to_buy": "You are about to buy {parcel_name} {parcel_price}.",
-    "approved_balance": "Your approved balance is {approved_balance}",
-    "buy_land": "Buy LAND",
-    "buy_mana": "{click_here} to buy some MANA.",
-    "didnt_approve": "You haven't authorized MANA usage",
-    "needs_at_least": "You need at least {mana} in order to buy this LAND.",
-    "please_approve":
-      "Please go to {settings_link} and allow the Marketplace contract to operate MANA on your behalf",
-    "total_balance": "Your balance is {balance}"
-  },
-  "parcel_cancel": {
-    "about_to_cancel": "You are about to cancel the sale of {parcel}.",
-    "cancel_land": "Cancel Sale",
-    "not_for_sale": "The parcel {parcel} is not for sale."
-  },
   "parcel_detail": {
     "actions": {
-      "cancel": "Cancel sale",
-      "create_estate": "Create Estate",
-      "permissions": "Permissions",
-      "sell": "Sell",
-      "transfer": "Transfer"
+      "create_estate": "Create Estate"
     },
     "description": "Description",
     "empty_description": "This parcel has no description",
-    "history": {
-      "auction": "Auction",
-      "event": "Event",
-      "from": "From",
-      "price": "Price",
-      "sold": "Sold",
-      "title": "Transaction History",
-      "to": "To",
-      "when": "When"
-    },
     "owner": {
       "no_owner": "No Owner",
       "part_of": "Part of {name}"
     },
     "publication": {
-      "buy": "Buy",
-      "mortgage": "Request Mortgage",
-      "price": "Price"
+      "mortgage": "Request Mortgage"
     },
     "tags": {
       "title": "Highlights"
@@ -289,23 +336,6 @@
     "give_permission": "Give permission to update contents of {parcel_name}.",
     "manage_land": "Manage LAND"
   },
-  "parcel_publish": {
-    "already_sold": "This LAND is already on sale for {value}",
-    "errors": {
-      "maximum_expiration": "The maximum expiration date is {date}",
-      "maximum_land_price": "The maximum LAND price is {value} MANA",
-      "minimum_expiration": "The minimum expiration date is {date}",
-      "minimum_land_price": "The minimum LAND price is {value} MANA"
-    },
-    "expiration": "Expiration",
-    "expiration_placeholder": "Expiration date for this publication",
-    "list_land": "List LAND for sale",
-    "please_authorize":
-      "You need to go to {settings_link} and authorize the Marketplace to operate LAND on your behalf before you can list it on sale.",
-    "price": "Price",
-    "price_placeholder": "Price in MANA for this LAND",
-    "set_land_price": "Set a price and an expiration date for {parcel_name}."
-  },
   "parcel_tags": {
     "adjacent": "Adjacent",
     "district": "District",
@@ -323,35 +353,18 @@
     "view": "View"
   },
   "settings": {
-    "approve_mana":
-      "Authorize the {marketplace_contract_link} to operate MANA on your behalf",
-    "approve_mana_check":
-      "Checking authorizes MANA usage to the Marketplace contract",
-    "approve_mortgage_mana":
-      "Authorize the {mortgage_contract_link} to operate MANA on your behalf",
-    "approve_mortgage_rcn":
-      "Authorize the {mortgage_contract_link} to operate RCN on your behalf",
     "authorization": "Authorization",
-    "authorize":
-      "Authorize the {marketplace_contract_link} to operate LAND on your behalf",
-    "authorize_land_check":
-      "Checking authorizes LAND usage to the Marketplace contract",
-    "disapprove_mana_check":
-      "Unchecking unauthorizes MANA usage for the Marketplace contract",
-    "mana_approved":
-      "You have authorized the {marketplace_contract_link} to operate MANA on your behalf",
-    "marketplace_contract": "Marketplace contract",
-    "mortgage_helper_contract": "Mortgage Helper contract",
-    "mortgage_manager_contract": "Mortgage Manager contract",
-    "pending_tx": "You have a pending transaction",
-    "unauthorize_land_check":
-      "Unchecking unauthorizes LAND usage for the Marketplace contract",
-    "you_approved_mortgage_mana":
-      "You have authorized the {mortgage_contract_link} to operate MANA on your behalf",
-    "you_approved_mortgage_rcn":
-      "You have authorized the {mortgage_contract_link} to operate RCN on your behalf",
-    "you_authorized":
-      "You have authorized the {marketplace_contract_link} to operate LAND on your behalf"
+    "authorization_error":
+      "We couldn't load your authorizations, please try again",
+    "authorization_error_contact":
+      "If the error persist don't hesitate to contact us",
+    "for_buying": "For buying",
+    "for_buying_LegacyMarketplace": "Assets using MANA (legacy)",
+    "for_buying_Marketplace": "Assets using MANA",
+    "for_selling": "For selling",
+    "legacy_authorization": "Legacy authorization",
+    "pending_tx":
+      "Transaction pending, click the loading to go to your activity for a detailed status"
   },
   "sign_in": {
     "account_unlocked": "Make sure your account is unlocked",
@@ -365,20 +378,14 @@
     }
   },
   "transaction": {
-    "approved":
-      "You authorized the {marketplace_contract_link} to operate MANA on your behalf",
-    "authorize":
-      "You {action} the {marketplace_contract_link} to operate LAND on your behalf",
     "buy": "You bought {parcel_link}",
     "buy_mana": "You bought {mana} MANA",
-    "cancel": "You cancelled the {publication_link} on {parcel_link}",
+    "cancel": "You cancelled the sale on {parcel_link}",
     "cancel_mortgage": "You cancel a Mortgage to buy the parcel {parcel_link}",
     "claim_mortgage_resolution": "You claimed {parcel_link}",
     "create_estate": "You created the estate {name}",
     "create_mortgage":
       "You requested a Mortgage to buy the parcel {parcel_link}",
-    "disapproved":
-      "You unauthorized the {marketplace_contract_link} to operate MANA on your behalf",
     "dissolve_estate": "You dissolved the estate {name}",
     "edit":
       "You edited {parcel_link} with the name \"{name}\" and description \"{description}\"",
@@ -392,14 +399,19 @@
     "manage_revoked":
       "You revoked {address_link} permission to update the contents of {parcel_link}",
     "mortgage_mana":
-      "You {action} the {mortgage_contract_link} to operate MANA on your behalf.",
+      "You {action} the {mortgage_contract_link} to operate MANA on your behalf",
     "mortgage_rcn":
-      "You {action} the {mortgage_contract_link} to operate RCN on your behalf.",
+      "You {action} the {mortgage_contract_link} to operate RCN on your behalf",
     "pay_mortgage":
       "You made a partial payment of {amount} MANA for the mortgage to buy the parcel {parcel_link}",
-    "publish": "You published {parcel_link}",
+    "publish": "You listed {parcel_link} for sale",
     "transfer": "You transfered {asset_type} {asset_link} to {owner_link}",
     "transfer_mana": "You transfered {mana} MANA to {address_link}"
+  },
+  "transaction_confirmations": {
+    "count":
+      "{confirmations_count} {confirmations_count, plural, one {confirmation} other {confirmations}}",
+    "waiting": "Waiting for confirmations"
   },
   "transaction_status": {
     "activity_page": "activity page",
@@ -416,6 +428,25 @@
       "failed": "Your transaction failed, you can try sending a new one.",
       "pending": "The transaction is waiting to be confirmed."
     }
+  },
+  "transaction_tooltips": {
+    "dropped":
+      "This transaction has been dropped by the network. This could happen temporarily if you've sent a replacement transaction.",
+    "loading":
+      "Fetching transaction status. If this takes too long, you might need to send another transaction with higher gas.",
+    "queued":
+      "This transaction can't be processed yet because there is an earlier pending transaction",
+    "replaced":
+      "Another transaction with the same nonce as this one was mined instead"
+  },
+  "transaction_types": {
+    "confirmed": "Accepted",
+    "dropped": "Dropped",
+    "loading": "Loading",
+    "pending": "Pending",
+    "queued": "Queued",
+    "replaced": "Replaced",
+    "reverted": "Failed"
   },
   "transfer_estate": {
     "about_to_transfer": "You're about to transfer the estate {name}.",
